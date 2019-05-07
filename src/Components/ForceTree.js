@@ -8,7 +8,7 @@ class ForceTree extends React.Component {
     }
     render(){
 	const results = this.props.data;
-	console.log(results);
+	//console.log(results);
 	return(
 		<ForceGraph2D
 	    ref={el => { this.fg = el; }}
