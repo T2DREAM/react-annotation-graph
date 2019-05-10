@@ -8,33 +8,47 @@ export default class App extends Component {
 //Initiaite state for nodes & links (loading for now)  
   constructor() {
       super();
-      this.performSearch = this.performSearch.bind(this);
-      this.performAnnotationFilter = this.performAnnotationFilter.bind(this);
+      //this.performSearch = this.performSearch.bind(this);
+      //this.performAnnotationFilter = this.performAnnotationFilter.bind(this);
       this.performUrl = this.performUrl.bind(this);
       this.state = {
-	  items: {links:[{source:"Loading...",target:"Loading..."}],nodes:[{color: "#170451", id: undefined, label: "Loading...", leaf: "Loading...", level: 0,link: "", name: "", path: "Loading..."}]}};
+	  graph_items: {links:[{source:"Loading...",target:"Loading..."}],nodes:[{color: "#170451", id: undefined, label: "Loading...", leaf: "Loading...", level: 0,link: "", name: "", path: "Loading..."}]},
+	  query: 'rs7903146',
+	  annotation:[]
+      };
   }
-    componentDidMount() {
-	this.performSearch();
-    }
+    //componentDidUpdate(){
+	//this.performUrl();
+    //}
+    //componentWillUnmount(){
+	//this.performUrl();
+    //}
     //fetch variant graph data from DGA API, rs7903146 is default query variant
-    performAnnotationFilter = (annotation_filters) => {
+    performSearch = (query) =>
+	{
+	    this.setState({
+		query: query
+	    });
+	    //console.log(query);
+	    this.performUrl();
+    }
+
+    performAnnotationFilter = (annotation_filter) => {
+	this.performUrl();
 	var arr = [];
-	arr = annotation_filters.map(value => value.value);
+	arr = annotation_filter.map(value => value.value);
 	var arr1 = arr.join(',');
-	//this.performUrl(arr1);
+	this.setState({
+	    annotation: [arr1]
+	})
+	//query = this.state.query
     }
-    performSearch = (query='rs7903146') =>
-    {
-	var url = query;
-	this.performUrl(query);
-    }
-    performUrl = (query) => {
-	var annotation = '';
+    performUrl = () => {
+	//var annotation = '';
 	var postData = {
-	    region: query,
+	    region: this.state.query,
 	    genome: "GRCh37",
-	    ...(annotation ?  {annotation_type: annotation}  : {})
+	    ...(this.state.annotation ?  {annotation_type: this.state.annotation}  : {})
 	};
 	let axiosConfig = {
 	    headers: {
@@ -44,7 +58,6 @@ export default class App extends Component {
 	};
 	axios.post('https://cors-anywhere.herokuapp.com/http://www.apps.t2depigenome.org:8080/getAnnotationVariant', postData, axiosConfig)
 	    .then(response => {
-		console.log(response);
 		const links = [];
 		const nodes1 = response.data.nodes;
 		//console.log(nodes1);
@@ -71,16 +84,20 @@ export default class App extends Component {
 		    }
 		});
 		this.setState({
-		    items: {nodes, links}
+		    graph_items: {nodes, links}
 		});
 	    })
 	    .catch(error => {
 		console.log('Error fetching and parsing data', error);
 	    });
     }
+    componentDidMount(){
+	//this.performSearch();
+	//this.performAnnotationFilter();
+	this.performUrl();
+    }
     //search & variant graph components
     render() {
-	const data = this.state.items;	
 	return (
 		<div>
 		<div className="main-header">
@@ -92,7 +109,7 @@ export default class App extends Component {
 		<div className="main-content">
 		<h3> Annotation Filter</h3>
 		<AnnotationFilter onFilter={this.performAnnotationFilter}/>
-		<ForceTree data={this.state.items} />
+		<ForceTree data={this.state.graph_items} />
 		</div>
 		</div>
 	);
