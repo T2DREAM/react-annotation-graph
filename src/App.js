@@ -3,13 +3,13 @@ import './App.css';
 import axios from 'axios';
 import SearchForm from './Components/SearchForm';
 import ForceTree from './Components/ForceTree';
-import BiosampleFilter from './Components/BiosampleFilter';
+import AnnotationFilter from './Components/AnnotationFilter';
 export default class App extends Component {
 //Initiaite state for nodes & links (loading for now)  
   constructor() {
       super();
       this.performSearch = this.performSearch.bind(this);
-      this.performFilter = this.performFilter.bind(this);
+      this.performAnnotationFilter = this.performAnnotationFilter.bind(this);
       this.performUrl = this.performUrl.bind(this);
       this.state = {
 	  items: {links:[{source:"Loading...",target:"Loading..."}],nodes:[{color: "#170451", id: undefined, label: "Loading...", leaf: "Loading...", level: 0,link: "", name: "", path: "Loading..."}]}};
@@ -18,19 +18,33 @@ export default class App extends Component {
 	this.performSearch();
     }
     //fetch variant graph data from DGA API, rs7903146 is default query variant
-    performFilter = (filters) => {
+    performAnnotationFilter = (annotation_filters) => {
 	var arr = [];
-	arr = filters.map(value => value.value);
-	var arr1 = arr.join('');
+	arr = annotation_filters.map(value => value.value);
+	var arr1 = arr.join(',');
+	//this.performUrl(arr1);
     }
     performSearch = (query='rs7903146') =>
     {
 	var url = query;
-	this.performUrl(url);
+	this.performUrl(query);
     }
     performUrl = (query) => {
-	axios.get(`https://www.t2depigenome.org/variant_graph/region=${query}&genome=GRCh37/variant_graph.json`)
+	var annotation = '';
+	var postData = {
+	    region: query,
+	    genome: "GRCh37",
+	    ...(annotation ?  {annotation_type: annotation}  : {})
+	};
+	let axiosConfig = {
+	    headers: {
+		'Content-Type': 'application/json',
+		'Access-Control-Allow-Origin': '*'
+	    }
+	};
+	axios.post('https://cors-anywhere.herokuapp.com/http://www.apps.t2depigenome.org:8080/getAnnotationVariant', postData, axiosConfig)
 	    .then(response => {
+		console.log(response);
 		const links = [];
 		const nodes1 = response.data.nodes;
 		//console.log(nodes1);
@@ -75,8 +89,11 @@ export default class App extends Component {
 		<SearchForm onSearch={this.performSearch} />
 		</div>
 		</div>
-		<BiosampleFilter onFilter={this.performFilter}/>
+		<div className="main-content">
+		<h3> Annotation Filter</h3>
+		<AnnotationFilter onFilter={this.performAnnotationFilter}/>
 		<ForceTree data={this.state.items} />
+		</div>
 		</div>
 	);
     }

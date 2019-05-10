@@ -4,7 +4,7 @@ import { ForceGraph2D } from 'react-force-graph';
 class ForceTree extends React.Component {
     componentDidMount() {
 	 // add collision force
-	this.fg.zoom(3, 10);
+	this.fg.zoom(2, 8);
     }
     render(){
 	const results = this.props.data;

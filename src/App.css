@@ -116,8 +116,8 @@ button {
 
 .inner,
 .main-content {
-  width: 90%;
-  max-width: 1025px;
+  width: 100%;
+  max-width: 1700px;
   margin: auto;
 }
 
@@ -133,8 +133,11 @@ button {
 
 .main-content::after {
   content: " ";
-  display: table;
+  width: 80%;
   clear: both;
+  display: flex;
+  align-items: center;
+  justify-content: center 
 }
 
 .is-hidden {

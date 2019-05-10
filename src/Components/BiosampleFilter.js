@@ -56,7 +56,7 @@ let options = [];
 options = options.concat(biosamples.map(x => x));
 
 function MakeOptions(x) {
-    return {value: '&biosample_term_name=' + x, label: x};
+    return {value: x, label: x};
 }
 
 class BiosampleFilter extends Component {
