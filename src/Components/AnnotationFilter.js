@@ -13,7 +13,7 @@ let options = [];
 options = options.concat(annotations.map(x => x));
 
 function MakeOptions(x) {
-    return {value: "'" + x + "'" , label: x};
+    return {value: x , label: x};
 }
 
 class AnnotationFilter extends Component {

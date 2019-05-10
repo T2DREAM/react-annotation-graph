@@ -8,12 +8,12 @@ export default class App extends Component {
 //Initiaite state for nodes & links (loading for now)  
   constructor() {
       super();
-      //this.performSearch = this.performSearch.bind(this);
+      this.performSearch = this.performSearch.bind(this);
       //this.performAnnotationFilter = this.performAnnotationFilter.bind(this);
       this.performUrl = this.performUrl.bind(this);
       this.state = {
 	  graph_items: {links:[{source:"Loading...",target:"Loading..."}],nodes:[{color: "#170451", id: undefined, label: "Loading...", leaf: "Loading...", level: 0,link: "", name: "", path: "Loading..."}]},
-	  query: 'rs7903146',
+	  newQuery: 'rs7903146',
 	  annotation:[]
       };
   }
@@ -24,29 +24,28 @@ export default class App extends Component {
 	//this.performUrl();
     //}
     //fetch variant graph data from DGA API, rs7903146 is default query variant
+    //callback passed to setState access State right after setting it
     performSearch = (query) =>
 	{
 	    this.setState({
-		query: query
-	    });
-	    //console.log(query);
-	    this.performUrl();
-    }
-
+		newQuery: query
+	    }, () => (this.performUrl()));
+	    }
     performAnnotationFilter = (annotation_filter) => {
-	this.performUrl();
+	//this.performUrl();
 	var arr = [];
 	arr = annotation_filter.map(value => value.value);
 	var arr1 = arr.join(',');
+	//let arr1_json = JSON.parse(arr1);
 	this.setState({
 	    annotation: [arr1]
-	})
-	//query = this.state.query
+	},  () => (this.performUrl()))
     }
     performUrl = () => {
 	//var annotation = '';
+	console.log(this.state.annotation);
 	var postData = {
-	    region: this.state.query,
+	    region: this.state.newQuery,
 	    genome: "GRCh37",
 	    ...(this.state.annotation ?  {annotation_type: this.state.annotation}  : {})
 	};
