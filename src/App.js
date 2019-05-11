@@ -4,25 +4,19 @@ import axios from 'axios';
 import SearchForm from './Components/SearchForm';
 import ForceTree from './Components/ForceTree';
 import AnnotationFilter from './Components/AnnotationFilter';
+import BiosampleFilter from './Components/BiosampleFilter';
 export default class App extends Component {
 //Initiaite state for nodes & links (loading for now)  
   constructor() {
       super();
-      this.performSearch = this.performSearch.bind(this);
-      //this.performAnnotationFilter = this.performAnnotationFilter.bind(this);
       this.performUrl = this.performUrl.bind(this);
       this.state = {
 	  graph_items: {links:[{source:"Loading...",target:"Loading..."}],nodes:[{color: "#170451", id: undefined, label: "Loading...", leaf: "Loading...", level: 0,link: "", name: "", path: "Loading..."}]},
 	  newQuery: 'rs7903146',
-	  annotation:[]
+	  annotation:[],
+	  biosample:[]
       };
   }
-    //componentDidUpdate(){
-	//this.performUrl();
-    //}
-    //componentWillUnmount(){
-	//this.performUrl();
-    //}
     //fetch variant graph data from DGA API, rs7903146 is default query variant
     //callback passed to setState access State right after setting it
     performSearch = (query) =>
@@ -32,21 +26,29 @@ export default class App extends Component {
 	    }, () => (this.performUrl()));
 	    }
     performAnnotationFilter = (annotation_filter) => {
-	//this.performUrl();
 	var arr = [];
+	var arr1 = [];
 	arr = annotation_filter.map(value => value.value);
-	var arr1 = arr.join(',');
-	//let arr1_json = JSON.parse(arr1);
+	var arr1 = arr1.concat(arr);
 	this.setState({
-	    annotation: [arr1]
+	    annotation: arr1
+	},  () => (this.performUrl()))
+    }
+    performBiosampleFilter = (biosample_filter) => {
+	var arr = [];
+	var arr1 = [];
+	arr = biosample_filter.map(value => value.value);
+	var arr1 = arr1.concat(arr);
+	this.setState({
+	    biosample: arr1
 	},  () => (this.performUrl()))
     }
     performUrl = () => {
-	//var annotation = '';
 	console.log(this.state.annotation);
 	var postData = {
 	    region: this.state.newQuery,
 	    genome: "GRCh37",
+	    ...(this.state.biosample ?  {biosample_term_name: this.state.biosample}  : {}),
 	    ...(this.state.annotation ?  {annotation_type: this.state.annotation}  : {})
 	};
 	let axiosConfig = {
@@ -91,8 +93,6 @@ export default class App extends Component {
 	    });
     }
     componentDidMount(){
-	//this.performSearch();
-	//this.performAnnotationFilter();
 	this.performUrl();
     }
     //search & variant graph components
@@ -108,6 +108,8 @@ export default class App extends Component {
 		<div className="main-content">
 		<h3> Annotation Filter</h3>
 		<AnnotationFilter onFilter={this.performAnnotationFilter}/>
+		<h3> Biosample Filter</h3>
+		<BiosampleFilter onFilter={this.performBiosampleFilter}/>
 		<ForceTree data={this.state.graph_items} />
 		</div>
 		</div>
