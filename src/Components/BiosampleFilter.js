@@ -71,7 +71,6 @@ class BiosampleFilter extends Component {
 	//console.log(`Option selected:`, newValue);
     };
     render() {
-	//const { selectedOption } = this.state;
 	return (
       <Select
         isMulti

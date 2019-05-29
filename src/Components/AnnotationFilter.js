@@ -1,43 +1,51 @@
 import React, { Component } from "react";
-import Select from "react-select";
-
-let annotations = [
-    'chromatin state',
-    'accessible chromatin',
-    'variant allelic effects',
-    'target gene predictions',
-    'binding sites'
-    ];
-let options = [];
-
-options = options.concat(annotations.map(x => x));
-
-function MakeOptions(x) {
-    return {value: x , label: x};
-}
+import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 
 class AnnotationFilter extends Component {
   constructor(props) {
-    super(props);
-    this.state = {
-      value: ""
-    };
+
+      super(props);      
+      this.state = {
+	  selected: {
+	      'chromatin state': false,
+	      'accessible chromatin': false,
+	      'variant allelic effects': false,
+	      'target gene predictions': false,
+	      'binding sites': false,
+	  }
+      };
+      this.toggleOption = this.toggleOption.bind(this);
+      
   }
-    handleChange = (value) => {
-	this.props.onFilter(value);
-	//console.log(`Option selected:`, newValue);
+      toggleOption = (e) => {
+	  const key = e.target.value;
+	  const value = !this.state.selected[key];
+	  const newSelected = Object.assign(this.state.selected, {[key]: value});
+	  this.props.onFilter(newSelected);
+      };
+    getBsStyle(key) {
+	return this.state.selected[key] ? 'primary' : 'default';
     };
     render() {
-	//const { selectedOption } = this.state;
 	return (
-      <Select
-        isMulti
-            options={options.map(x => MakeOptions(x))}
-        className="basic-multi-select"
-        classNamePrefix="select"
-        closeMenuOnSelect={false}
-        onChange={this.handleChange}    
-      />
+		<ButtonGroup>
+		<Button onClick={this.toggleOption} value='chromatin state' variant = {this.getBsStyle('chromatin state')}>
+	        Chromatin State
+	        </Button>
+	        <Button onClick={this.toggleOption} value='accessible chromatin' variant  = {this.getBsStyle('accessible chromatin')}>
+	        Accessible Chromatin
+                </Button>
+	        <Button onClick={this.toggleOption} value='variant allelic effects' variant  = {this.getBsStyle('variant allelic effects')}>
+                Variant Allelic Effects
+                </Button>
+                <Button onClick={this.toggleOption} value='target gene predictions' variant  = {this.getBsStyle('target gene predictions')}>
+                Target Gene Predictions
+                </Button>
+                <Button onClick={this.toggleOption} value='binding sites' variant  = {this.getBsStyle('binding sites')}>
+                Binding Sites
+                </Button>
+                </ButtonGroup>
     );
   }
 }

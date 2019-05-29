@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
-import './App.css';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import axios from 'axios';
 import SearchForm from './Components/SearchForm';
 import ForceTree from './Components/ForceTree';
 import AnnotationFilter from './Components/AnnotationFilter';
 import BiosampleFilter from './Components/BiosampleFilter';
+import './bootstrap.min.css';
+//import 'bootstrap/dist/css/bootstrap.css';
 export default class App extends Component {
 //Initiaite state for nodes & links (loading for now)  
   constructor() {
@@ -26,10 +30,12 @@ export default class App extends Component {
 	    }, () => (this.performUrl()));
 	    }
     performAnnotationFilter = (annotation_filter) => {
-	var arr = [];
 	var arr1 = [];
-	arr = annotation_filter.map(value => value.value);
-	var arr1 = arr1.concat(arr);
+	Object.keys(annotation_filter).map(function(keyName) {
+	    if (annotation_filter[keyName] === true) {
+		return (arr1 = arr1.concat(keyName));
+	    }
+	})
 	this.setState({
 	    annotation: arr1
 	},  () => (this.performUrl()))
@@ -44,7 +50,6 @@ export default class App extends Component {
 	},  () => (this.performUrl()))
     }
     performUrl = () => {
-	console.log(this.state.annotation);
 	var postData = {
 	    region: this.state.newQuery,
 	    genome: "GRCh37",
@@ -61,7 +66,6 @@ export default class App extends Component {
 	    .then(response => {
 		const links = [];
 		const nodes1 = response.data.nodes;
-		//console.log(nodes1);
 		const nodes = [];
 		nodes1.forEach(({tst, label, link, color, path, name}) => {
 		    const levels = path.split('|'),
@@ -98,21 +102,21 @@ export default class App extends Component {
     //search & variant graph components
     render() {
 	return (
-		<div>
-		<div className="main-header">
-		<div className="inner">
-		<h1 className="main-title">Variant Search</h1>
+		<Container >
+		<br/>
+		<Row>
+		<Col md={{ span: 6, offset: 8 }}>
 		<SearchForm onSearch={this.performSearch} />
-		</div>
-		</div>
-		<div className="main-content">
-		<h3> Annotation Filter</h3>
+		</Col>
+		</Row>
+		<h5> Annotation Filter</h5>
 		<AnnotationFilter onFilter={this.performAnnotationFilter}/>
-		<h3> Biosample Filter</h3>
+		<h5> Biosample Filter</h5>
 		<BiosampleFilter onFilter={this.performBiosampleFilter}/>
+		<Row className="justify-content-md-center">
 		<ForceTree data={this.state.graph_items} />
-		</div>
-		</div>
+		</Row>
+		</Container>
 	);
     }
 }

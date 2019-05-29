@@ -5,10 +5,15 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "bootstrap": "^4.3.1",
     "react": "^16.8.6",
+    "react-bootstrap": "^1.0.0-beta.8",
+    "react-btn-checkbox": "0.0.2",
     "react-d3-legends": "0.0.27",
     "react-dom": "^16.8.6",
     "react-force-graph": "^1.20.6",
+    "react-native": "^0.59.8",
+    "react-native-selectmultiple-button": "^0.1.105",
     "react-scripts": "3.0.0",
     "react-select": "^2.4.3"
   },
