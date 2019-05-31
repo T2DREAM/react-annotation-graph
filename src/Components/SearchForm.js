@@ -20,12 +20,12 @@ export default class SearchForm extends Component {
     render() {  
 	return (
 		<Form inline onSubmit={this.handleSubmit}>
-		<FormControl className="mr-sm-2" type="search" 
+		<FormControl className="mr-md-2" type="search" 
             onChange={this.onSearchChange}
             name="search"
 	    ref={(input) => this.query = input}
             placeholder="Search..." />
-		<Button variant="outline-primary" type="submit" id="submit">Search</Button>
+		<Button variant="outline-primary" size="sm" type="submit" id="submit">Search</Button>
 		<div>
 		</div>
 		</Form>
