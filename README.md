@@ -7,6 +7,8 @@ The graph annotations are nodes colored and organized by tissue/cell-type
 
 In addition, the user can click on an annotation to re-direct to the DGA page to obtain more detailed information for that annotation
 
+![](app.gif)
+
 ## Usage
 
 
