@@ -14,13 +14,9 @@ import './bootstrap.min.css';
 import { LegendOrdinal } from '@vx/legend';
 import { scaleOrdinal } from '@vx/scale';
 const tissues = scaleOrdinal({
-    domain: ['liver', 'HepG2', 'islet', 'adipocyte', 'subcutaneous adipose', 'visceral adipose', 'skeletal muscle myoblast', 'skeletal muscle', 'pancreas', 'alpha cell', 'beta cell', 'delta cell', 'stellate cell', ],
-    range: ['#0000ff', '#ff3300', '#ff00ff','#f98900','#66ffff','#5daaaa','#2c5e8d','#1a5353','#78ff02','#8b0000','#21a041','#ffcff1','#00ffff','#8b4513']
+    domain: ['liver', 'adipocyte', 'subcutaneous adipose', 'visceral adipose', 'skeletal muscle myoblast', 'skeletal muscle', 'pancreas', 'heart', 'kidney', 'endothelial cell of umbilical vein','other'],
+    range: ['#ffd700', '#f98900','#66ffff','#5daaaa','#2c5e8d','#1a5353','#8b0000','#ff0000','#7fff00','#ff00ff','#d6d1d1']
   
-});
-const tissues_next = scaleOrdinal({
-    domain: ['acinar cell', 'pancreatic cell','ductal cell', 'endothelial cell', 'exocrine cell', 'glial cell', 'immune cell', 'polypetide-secreting', 'complication tissue','other tissues'],
-    range: ['#8b4513','#ee82ee','#ab93fd','#bdb76b','#6e8b1c','#73cccc','#b38019','#685b40','#ffc107', '#d6d1d1']
 });
 export default class App extends Component {
 //Initiaite state for nodes & links (loading for now)  
@@ -78,12 +74,12 @@ export default class App extends Component {
 		'Access-Control-Allow-Origin': '*'
 	    }
 	};
-	axios.post('https://cors-anywhere.herokuapp.com/http://www.apps.t2depigenome.org:8080/getAnnotationVariant', postData, axiosConfig)
+	axios.post('https://cors-anywhere.herokuapp.com/http://www.t2depigenome.org:8080/getAnnotationVariantGraph', postData, axiosConfig)
 	    .then(response => {
 		const links = [];
 		const nodes1 = response.data.nodes;
 		const nodes = [];
-		nodes1.forEach(({tst, label, link, color, path, name}) => {
+		nodes1.forEach(({tst, label, link, color, path, name, type}) => {
 		    const levels = path.split('|'),
 			  level = levels.length - 1,
 			  leaf = levels.pop(),
@@ -97,7 +93,8 @@ export default class App extends Component {
 			link,
 			label,
 			name,
-			level
+			level,
+			type,
 		    };
 		    nodes.push(node);
 		    if (parent) {
@@ -106,7 +103,7 @@ export default class App extends Component {
 		});
 		this.setState({
 		    graph_items: {nodes, links},
-		    nodes: nodes,
+		    links: links,
 		});
 	    })
 	    .catch(error => {
@@ -118,6 +115,14 @@ export default class App extends Component {
     }
     //search & variant graph components
     render() {
+	let graph;
+	if (this.state.links == 0) {
+	    graph =	<div><h5>Your selection has no results! Please select a different variant/annotation/biosample</h5></div>
+	}
+	else
+	{
+	    graph =	<ForceTree data={this.state.graph_items} />
+	}
 	return (
 		<Container >
 		<Card.Header>
@@ -129,7 +134,7 @@ export default class App extends Component {
 		</Row>
 		<Row>
 		<Col md={{ span: 6, offset: 7 }}>
-		<h6 className="text-muted">examples:rs231361,chr10:66794059</h6>
+		<h6 className="text-muted">examples:rs231361,chr8:118184783</h6>
 		</Col>
 		</Row>
 		<h5> Annotation Filter</h5>
@@ -138,13 +143,11 @@ export default class App extends Component {
 		<BiosampleFilter onFilter={this.performBiosampleFilter}/>
 		</Card.Header>
 		<Card border="secondary" style={{padding: '10px'}}>
-		<LegendOrdinal scale={tissues} direction="row" labelMargin="0 15px 0 5px" shapeMargin="1px 0 0"/>
+		<LegendOrdinal scale={tissues} direction="row" labelMargin="0 5px 0 5px" shapeMargin="1px 0 0"/>
 		<br/>
-		<br/>
-		<LegendOrdinal scale={tissues_next} direction="row" labelMargin="0 15px 0 5px" shapeMargin="1px 0 0"/>
 		</Card>
 		<Row className="justify-content-md-center">
-		<ForceTree data={this.state.graph_items} />
+		{graph}
 		</Row>
 		<Card.Footer className="text-muted">
 		&copy;2019 Diabetes Epigenome Atlas
