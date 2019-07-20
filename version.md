@@ -6,6 +6,7 @@
 * JavaScript module that uses force graph to display an interactive directed tree graph of all annotation data currently in the DGA for a query genetic variant
 * The graph annotations are nodes colored and organized by tissue/cell-type
 * User can click on an annotation to re-direct to the DGA page to obtain more detailed information for that annotation
+* User can filter by annotation type (Chromatin State, Accesible Chromatin, Target Gene Predictions, Binding Sites or biosample type (Diabetes Relevant tissues, Complication Tissues, All Tisues)
 * Navigation 
   * Mouse wheel/click: zoom in/out
   * Node left click: redirect to annotation on DGA
