@@ -1,13 +1,28 @@
 
 # Interactive graphical view of all DGA annotations
 
-This is a JavaScript module that uses [force graph](https://github.com/d3/d3-force) to display an interactive directed tree graph of all annotation data currently in the DGA for a query genetic variant, gene or region.
+### Graphical Display 
+* JavaScript module that uses force graph to display an interactive tree graph of all the **Target Gene Predictions** of all annotation data currently in DGA for various Diabetes releveant and complication tissues and cell types in the DGA for a query genetic variant
+* User can search for variant rsid (example: rs7903146, chr10:66794059) or variant coordinate via. Search interface on top right corner
+* User can click on an annotation to re-direct to the DGA page to obtain more detailed information for that annotation
+* The graph can be filtered by type of target gene (method) i.e. **Promoter HiC, Co-accesibility, eQTL**
+* Links weighted by whether variant is in chromatin state or open chromatin or has allelic effect on cell type. In addition, hovering over rsid to tissue/cell type links gives annotation types
+*  Genes weighted by number of cell types/biosamples linking to that gene 
+*  Highlight nodes/links for selection i.e. variant <-> tissues <-> genes
+* Navigation 
+  * Mouse wheel/click: zoom in/out
+  * Node left click: redirect to annotation on DGA
+  *  Hover over the node: for node label aka. tissue, cell type or annotation accession
+  * Hover over the link (variant - tissues or tissues - cell type): for annotation type
+  * Filter buttons: Filter by type of target gene aka method
+  
 
-The graph annotations are nodes colored and organized by tissue/cell-type
+### Tabular Display 
+* All the annotations that intersect the variants searched are displayed (in case of chromatin state only active states are displayed)
+* Sort & Filter the table by Biosample, Annotation Type, State
+*  Download results as csv file
+* User can click on an annotation to re-direct to the DGA page to obtain more detailed information for that annotation
 
-In addition, the user can click on an annotation to re-direct to the DGA page to obtain more detailed information for that annotation
-
-![](app.gif)
 
 ## Usage
 
