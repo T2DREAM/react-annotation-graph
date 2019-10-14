@@ -13,18 +13,18 @@ This list is based on feedback for react annotation graph V0.2 by T2D AMP consor
 - [ ] Make the application aesthetically nicer
 - [ ] Highlight nodes/links for selection i.e. variant <-> tissues <-> genes
 * Navigation 
-  [x] Mouse wheel/click: zoom in/out
-  [x] Node left click: redirect to annotation on DGA
-  [x] Hover over the node: for node label aka. tissue, cell type or annotation accession
-  [x] Hover over the link (variant - tissues or tissues - cell type): for annotation type
-  [x] Filter buttons: Filter by type of target gene aka method
+  - [x] Mouse wheel/click: zoom in/out
+  - [x] Node left click: redirect to annotation on DGA
+  - [x] Hover over the node: for node label aka. tissue, cell type or annotation accession
+  - [x] Hover over the link (variant - tissues or tissues - cell type): for annotation type
+  - [x] Filter buttons: Filter by type of target gene aka method
   
 
 ### Tabular Display
-[x] All the annotations that intersect the variants searched are displayed (in case of chromatin state only active states are displayed)
-[x] Sort & Filter the table by Biosample, Annotation Type, State
-[x] Download results as csv file
-[x] User can click on an annotation to re-direct to the DGA page to obtain more detailed information for that annotation
+- [x] All the annotations that intersect the variants searched are displayed (in case of chromatin state only active states are displayed)
+- [x] Sort & Filter the table by Biosample, Annotation Type, State
+- [x] Download results as csv file
+- [x] User can click on an annotation to re-direct to the DGA page to obtain more detailed information for that annotation
 
 ###  Interactive genome browser showing links between distal elements and target genes  
-[ ] A JavaScript module using D3.js which will display links between genomic sites such as chromatin loops (from Hi-C/CHi-C) or co-accessibility (from single cell data).  This module, will display a genomic region which includes tracks containing ‘arcs’ between two linked loci and where the ‘arc’ height (or weight) is based on a value (e.g. the significance of a Hi-C loop) 
+- [ ] A JavaScript module using D3.js which will display links between genomic sites such as chromatin loops (from Hi-C/CHi-C) or co-accessibility (from single cell data).  This module, will display a genomic region which includes tracks containing ‘arcs’ between two linked loci and where the ‘arc’ height (or weight) is based on a value (e.g. the significance of a Hi-C loop) 
