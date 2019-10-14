@@ -1,7 +1,7 @@
 # Version History
 
 
-## 0.1
+## 0.1 (July 19th, 2019)
 
 * JavaScript module that uses force graph to display an interactive directed tree graph of all annotation data currently in the DGA for a query genetic variant
 * The graph annotations are nodes colored and organized by tissue/cell-type
