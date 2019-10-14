@@ -1,16 +1,30 @@
 ## TO DO
 
 
-This list is based on feedback for react annotation graph V0.1 by T2D AMP consortium members
+This list is based on feedback for react annotation graph V0.2 by T2D AMP consortium members
 
- - [x] Tabular view of results, sortable and searchable
- - [x] Aggregate same annotation names on the display for a given tissue (aka reduce reduncy) 
- - [x] Display only prominent annotations by default at the same time giving user the ability to view all results if interested
- - [ ] Add additional annotation datasets for sparse annotation type (particularly for target gene prediction) 
- - [ ] Show cell type label on graph by default
- - [ ] Ability to save/download the image or table
- - [x] Make filters that are currently being applied more explicit
- - [ ] Add genome tab to view annotations in integrated genome browser
- - [ ] Add radial plot tab to show quantitative values where applicable 
+ ### Graphical Display 
+- [x] JavaScript module that uses force graph to display an interactive tree graph of all the **Target Gene Predictions** of all annotation data currently in DGA for various Diabetes releveant and complication tissues and cell types in the DGA for a query genetic variant
+- [x] User can click on an annotation to re-direct to the DGA page to obtain more detailed information for that annotation
+- [x] The graph can be filtered by type of target gene (method) i.e. **Promoter HiC, Co-accesibility, eQTL**
+- [x] Error handling
+- [ ] Links weighted by whether variant is in chromatin state or open chromatin or has allelic effect on cell type. In addition, hovering over rsid to tissue/cell type links gives annotation types
+- [ ] Genes weighted by number of cell types/biosamples linking to that gene 
+- [ ] Make the application aesthetically nicer
+- [ ] Highlight nodes/links for selection i.e. variant <-> tissues <-> genes
+* Navigation 
+  [x] Mouse wheel/click: zoom in/out
+  [x] Node left click: redirect to annotation on DGA
+  [x] Hover over the node: for node label aka. tissue, cell type or annotation accession
+  [x] Hover over the link (variant - tissues or tissues - cell type): for annotation type
+  [x] Filter buttons: Filter by type of target gene aka method
+  
 
-July 31 2019
+### Tabular Display
+[x] All the annotations that intersect the variants searched are displayed (in case of chromatin state only active states are displayed)
+[x] Sort & Filter the table by Biosample, Annotation Type, State
+[x] Download results as csv file
+[x] User can click on an annotation to re-direct to the DGA page to obtain more detailed information for that annotation
+
+###  Interactive genome browser showing links between distal elements and target genes  
+[ ] A JavaScript module using D3.js which will display links between genomic sites such as chromatin loops (from Hi-C/CHi-C) or co-accessibility (from single cell data).  This module, will display a genomic region which includes tracks containing ‘arcs’ between two linked loci and where the ‘arc’ height (or weight) is based on a value (e.g. the significance of a Hi-C loop) 
