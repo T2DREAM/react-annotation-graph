@@ -8,9 +8,10 @@ This list is based on feedback for react annotation graph V0.2 by T2D AMP consor
 - [x] User can click on an annotation to re-direct to the DGA page to obtain more detailed information for that annotation
 - [x] The graph can be filtered by type of target gene (method) i.e. **Promoter HiC, Co-accesibility, eQTL**
 - [x] Error handling
-- [ ] Links weighted by whether variant is in chromatin state or open chromatin or has allelic effect on cell type. In addition, hovering over rsid to tissue/cell type links gives annotation types
+- [x] Links weighted by whether variant is in chromatin state or open chromatin or has allelic effect on cell type. In addition, hovering over rsid to tissue/cell type links gives annotation types
 - [ ] Genes weighted by number of cell types/biosamples linking to that gene 
-- [ ] Make the application aesthetically nicer
+* Make the application aesthetically nicer
+  - [ ] Move filters as side-bar 
 - [ ] Highlight nodes/links for selection i.e. variant <-> tissues <-> genes
 * Navigation 
   - [x] Mouse wheel/click: zoom in/out
