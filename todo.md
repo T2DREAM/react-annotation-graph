@@ -6,9 +6,11 @@ This list is based on feedback for react annotation graph V0.2 by T2D AMP consor
  ### Graphical Display 
 - [x] JavaScript module that uses force graph to display an interactive tree graph of all the **Target Gene Predictions** of all annotation data currently in DGA for various Diabetes releveant and complication tissues and cell types in the DGA for a query genetic variant
 - [x] User can click on an annotation to re-direct to the DGA page to obtain more detailed information for that annotation
-- [x] The graph can be filtered by type of target gene (method) i.e. **Promoter HiC, Co-accesibility, eQTL**
+* Filters
+  - [x] Type of Target Gene (method) i.e. **Promoter HiC, Co-accesibility, eQTL**
+  - [ ] Allelic Effect i.e **pbSNP**, **Chromatin QTL**
 - [x] Error handling
-- [x] Links weighted by whether variant is in chromatin state or open chromatin or has allelic effect on cell type. In addition, hovering over rsid to tissue/cell type links gives annotation types
+- [x] Links weighted by whether variant has allelic effect on cell type. In addition, hovering over rsid to tissue/cell type links gives annotation types
 - [ ] Genes weighted by number of cell types/biosamples linking to that gene 
 * Make the application aesthetically nicer
   - [ ] Move filters as side-bar 
