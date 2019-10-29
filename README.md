@@ -1,6 +1,8 @@
 
 # Interactive graphical view of all DGA annotations
 
+![](graph.gif)
+
 ### Graphical Display 
 * JavaScript module that uses force graph to display an interactive tree graph of all the **Target Gene Predictions** of all annotation data currently in DGA for various Diabetes releveant and complication tissues and cell types in the DGA for a query genetic variant
 * User can search for variant rsid (example: rs7903146, chr10:66794059) or variant coordinate via. Search interface on top right corner
