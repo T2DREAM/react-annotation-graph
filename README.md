@@ -9,13 +9,13 @@
 * User can search for variant rsid (example: rs7903146, chr10:66794059) or variant coordinate via. Search interface on top right corner
 * User can click on an annotation to re-direct to the DGA page to obtain more detailed information for that annotation
 * The graph can be filtered by type of target gene (method) i.e. **Promoter HiC, Co-accesibility, eQTL**
-* Links weighted by whether variant is in chromatin state or open chromatin or has allelic effect on cell type. In addition, hovering over rsid to tissue/cell type links gives annotation types
+* Links weighted by whether variant has allelic effect on cell type. In addition, hovering over rsid to tissue/cell type links gives annotation types
 *  Genes weighted by number of cell types/biosamples linking to that gene 
-*  Highlight nodes/links for selection i.e. variant <-> tissues <-> genes
+
 * Navigation 
   * Mouse wheel/click: zoom in/out
   * Node left click: redirect to annotation on DGA
-  *  Hover over the node: for node label aka. tissue, cell type or annotation accession
+  * Hover over the node: for node label aka. tissue, cell type or annotation accession
   * Hover over the link (variant - tissues or tissues - cell type): for annotation type
   * Filter buttons: Filter by type of target gene aka method
   
