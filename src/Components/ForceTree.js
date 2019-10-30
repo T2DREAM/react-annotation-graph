@@ -2,35 +2,45 @@ import React from 'react';
 import { ForceGraph2D } from 'react-force-graph';
 class ForceTree extends React.Component {
     componentDidMount() {
-	this.fg.zoom(1.75);
-	this.fg.d3Force('center');
-	//this.fg.centerAt(10,10);
+	this.fg.zoom(3);
+	//this.fg.d3Force('link', (node => Math.sqrt(100 / (node.level + 1)));
+	const node = this.props.data.nodes;
+	//this.fg.d3Force('link').distance((links) => 55)
+	//this.fg.d3Force('link').iterations(1.5);
+	this.fg.d3Force('link').distance(links => links.length);
+	console.log(node);
+	console.log(node.state_len);
+	//this.d3Force('link').distance(link => node.level === 3 ? 2 : 1, 3);
     }
     render(){
 	const results = this.props.data;
-	//console.log(results);
 	return(
-		<ForceGraph2D
-	    height = {700}
-	    width = {1400}
+	<div>    
+	<ForceGraph2D
+            width={1000}
+	    heigth={600}
 	    ref={el => { this.fg = el; }}
 	    graphData={results}
-	    dagMode='radialout'
-	    dagLevelDistance={60}
+	    dagLevelDistance={0.5}
 	    backgroundColor="#FFFFFF"
-	    linkColor={() => 'rgba(0,0,0,1)'}
-	    //nodeRelSize={2}
-	    nodeId="path"
+	    linkColor={() => 'rgba(128, 128, 128, 1)'}
+	    nodeRelSize= {2}
+	    nodeVal = {node => Math.pow((node.level) === 1 ? 2 : 1,(node.state_len))}
+	    //nodeVal = {node => Math.pow((node.state_len) === 1 ? 2 : 1,3)}
+	    nodeId= "path"
+	    nodeColor = { node => node.color }
 	    // node click direct to annotations on DGA
-	    onNodeClick={node => {if (node.level === 0) {window.open(`https://www.t2depigenome.org/variant-search/?${node.link}`, '_blank')} else {window.open(`https://www.t2depigenome.org/search/?type=Annotation&${node.link}`, '_blank')}}}
-	    // render nodes, text for variant and state (i.e. level 1 & 3), circle for biosample
-	    nodeCanvasObject={(node, ctx, globalScale) => {if ((node.level === 1)||(node.level === 2 && node.type === 'cell')){ctx.beginPath(); ctx.arc(node.x, node.y, 2, 0, 2 * Math.PI, false); ctx.fillStyle = node.color; ctx.fill();} else {const label = node.label; const fontSize = 12/globalScale; ctx.font = `${fontSize}px Arial`;const textWidth = ctx.measureText(label).width; const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2); ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'; ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, ...bckgDimensions); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = node.color; ctx.fillText(label, node.x, node.y); ctx.beginPath(); }}}
-	    nodeVal={node => 100 / (node.level + 1)}
+	    onNodeClick={node => {if (node.level === 0) {window.open(`https://www.diabetesepigenome.org/variant-search/?${node.link}`, '_blank')} else {window.open(`https://www.diabetesepigenome.org/search/?type=Annotation&${node.link}`, '_blank')}}}
+	    nodeCanvasObjectMode={node => 'after'}
+	    nodeResolution = {2}
+	    linkWidth = { link => (link.width * 2) + 1 }
+	    linkLabel = { link => link.label }
+	    nodeCanvasObject={(node, ctx, globalScale) => {if (node.level === 1) {const label = node.label; const fontSize = 14/globalScale; ctx.font = `${fontSize}px Sans-Serif`; ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = 'black'; ctx.fillText(label, node.x, node.y);} else {const label = node.label; ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';}}}
 	    nodeLabel= {node => `${node.name}`}
-	    d3VelocityDecay={0.08}
+	    d3VelocityDecay={0.1}
 	    rendererConfig={{ preserveDrawingBuffer: true }}
-	    showNavInfo={true}
 		/>
+           </div>		
 	);
     }
 }

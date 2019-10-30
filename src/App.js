@@ -3,20 +3,24 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
-//import Button from 'react-bootstrap/Button';
-//import Accordion from 'react-bootstrap/Accordion';
 import axios from 'axios';
 import SearchForm from './Components/SearchForm';
 import ForceTree from './Components/ForceTree';
-import AnnotationFilter from './Components/AnnotationFilter';
-import BiosampleFilter from './Components/BiosampleFilter';
+import AllelicEffectFilters from './Components/AllelicEffectFilters';
+import TableView from './Components/TabularView';
+import AppIgv from './Components/GenomeBrowser';
+import TargetGeneFilter from './Components/TargetGeneFilter';
 import './bootstrap.min.css';
+import Tabs from 'react-bootstrap/Tabs';
+import Form from 'react-bootstrap/Form';
+import Tab from 'react-bootstrap/Tabs';
+import Alert from 'react-bootstrap/Alert';
 import { LegendOrdinal } from '@vx/legend';
 import { scaleOrdinal } from '@vx/scale';
+import './react-bootstrap-table2.min.css';
 const tissues = scaleOrdinal({
-    domain: ['liver', 'adipocyte', 'subcutaneous adipose', 'visceral adipose', 'skeletal muscle myoblast', 'skeletal muscle', 'pancreas', 'heart', 'kidney', 'endothelial cell of umbilical vein','other'],
-    range: ['#ffd700', '#f98900','#66ffff','#5daaaa','#2c5e8d','#1a5353','#8b0000','#ff0000','#7fff00','#ff00ff','#d6d1d1']
-  
+    domain: ['pancreas'],
+    range: ['#add8e6']
 });
 export default class App extends Component {
 //Initiaite state for nodes & links (loading for now)  
@@ -24,49 +28,51 @@ export default class App extends Component {
       super();
       this.performUrl = this.performUrl.bind(this);
       this.state = {
-	  graph_items: {links:[{source:"Loading...",target:"Loading..."}],nodes:[{color: "#170451", id: undefined, label: "Loading...", leaf: "Loading...", level: 0,link: "", name: "", path: "Loading..."}]},
-	  newQuery: 'rs7903146',
-	  annotation:[],
-	  biosample:[],
+	  graph_items: {links:[{source:"Loading...",target:"Loading..."}],nodes:[{color: "#170451", id: undefined, label: "Loading...", level: 1,link: "", path: "Loading...",biosample:"", type:"", name:"Loading...", state_len: 3, annotation_type: "-", accession_ids: "-",}]},
+	  table_items: {links:[{source:"Loading...",target:"Loading..."}],nodes:[{color: "#170451", id: undefined, label: "Loading...", leaf: "Loading...", level: 0,link: "", name: "", path: "Loading...",biosample:"", type:""}]},
+	  newQuery: 'rs963740',
       };
   }
-    //fetch variant graph data from DGA API, rs7903146 is default query variant
-    //callback passed to setState access State right after setting it
+//fetch variant graph data from DGA API, rs7903146 is default query variant
+//callback passed to setState access State right after setting it
     performSearch = (query) =>
 	{
 	    this.setState({
 		newQuery: query
 	    }, () => (this.performUrl()));
-	    }
-    performAnnotationFilter = (annotation_filter) => {
+	}
+    performTargetGeneFilter = (targetgene_filter) => {
 	var arr1 = [];
-	Object.keys(annotation_filter).map(function(keyName) {
-	    if (annotation_filter[keyName] === true) {
+	Object.keys(targetgene_filter).map(function(keyName) {
+	    if (targetgene_filter[keyName] === true) {
 		return (arr1 = arr1.concat(keyName));
 	    }
 	})
 	this.setState({
-	    annotation: arr1
+	    targetgene: arr1
 	},  () => (this.performUrl()))
     }
-    performBiosampleFilter = (biosample_filter) => {
+    performAllelicEffectFilters = (alleliceffect_filter) => {
 	var arr1 = [];
-	Object.keys(biosample_filter).map(function(keyName) {
-	    if (biosample_filter[keyName] === true) {
-		var tissues = keyName.split(',')
-		return (arr1 = arr1.concat(tissues));
+	Object.keys(alleliceffect_filter).map(function(keyName) {
+	    if (alleliceffect_filter[keyName] === true) {
+		return (arr1 = arr1.concat(keyName));
 	    }
 	})
 	this.setState({
-	    biosample: arr1
+	    alleliceffect: arr1
 	},  () => (this.performUrl()))
     }
     performUrl = () => {
 	var postData = {
 	    region: this.state.newQuery,
 	    genome: "GRCh37",
-	    ...(this.state.biosample ?  {biosample_term_name: this.state.biosample}  : {}),
-	    ...(this.state.annotation ?  {annotation_type: this.state.annotation}  : {})
+	    ...(this.state.targetgene ?  {'software_used.software.title': this.state.targetgene}  : {}),
+            ...(this.state.alleliceffect ?  {'software_used.software.title': this.state.alleliceffect}  : {})	    
+	};
+	var postData1 = {
+	    region: this.state.newQuery,
+	    genome: "GRCh37"
 	};
 	let axiosConfig = {
 	    headers: {
@@ -74,36 +80,63 @@ export default class App extends Component {
 		'Access-Control-Allow-Origin': '*'
 	    }
 	};
-	axios.post('https://cors-anywhere.herokuapp.com/http://www.t2depigenome.org:8080/getAnnotationVariantGraph', postData, axiosConfig)
+	//var endpoint = (this.state.targetgene ?  this.state.targetgene  : 'getAnnotationVariantGraphNew');
+	axios.post('https://cors-anywhere.herokuapp.com/http://www.diabetesepigenome.org:8080/getAnnotationVariantGraphNew', postData, axiosConfig)
 	    .then(response => {
-		const links = [];
+		const links = response.data.links;
 		const nodes1 = response.data.nodes;
 		const nodes = [];
-		nodes1.forEach(({tst, label, link, color, path, name, type}) => {
-		    const levels = path.split('|'),
-			  level = levels.length - 1,
-			  leaf = levels.pop(),
-			  id = tst,
-			  parent = levels.join('|');
+		nodes1.forEach(({accession_ids, annotation_type, biosample, color, id, label, link, name, type, path, level, state_len}) => {
 		    const node = {
-			path,
-			leaf,
-			id,
+			accession_ids,
+			annotation_type,
+			biosample,
 			color,
-			link,
+			id,
 			label,
+			link,
 			name,
-			level,
 			type,
+			path,
+			level,
+			state_len
 		    };
 		    nodes.push(node);
-		    if (parent) {
-			links.push({source: parent, target: path});
-		    }
 		});
+		//console.log(links);
+		console.log(nodes);
 		this.setState({
 		    graph_items: {nodes, links},
-		    links: links,
+		    graph_links: links,
+		});
+	    })
+	    .catch(error => {
+		console.log('Error fetching and parsing data', error);
+	    });
+	axios.post('https://cors-anywhere.herokuapp.com/http://www.diabetesepigenome.org:8080/getAnnotationVariantAllGraph', postData1, axiosConfig)
+	    .then(response2 => {
+		const nodes1 = response2.data.nodes;
+		const nodes = [];
+		nodes1.forEach(({accession_ids, annotation_type, biosample, color, id, label, link, name, type, path, level, table_id}) => {
+		    const node = {
+			accession_ids,
+			annotation_type,
+			biosample,
+			color,
+			id,
+			label,
+			link,
+			name,
+			type,
+			path,
+			table_id,
+			level
+		    };
+		    nodes.push(node);
+		});
+		this.setState({
+		    table_items: {nodes},
+		    table_nodes: {nodes}
 		});
 	    })
 	    .catch(error => {
@@ -116,39 +149,65 @@ export default class App extends Component {
     //search & variant graph components
     render() {
 	let graph;
-	if (this.state.links == 0) {
-	    graph =	<div><h5>Your selection has no results! Please select a different variant/annotation/biosample</h5></div>
+	if (this.state.graph_links == 0) {
+	    graph = <Alert variant='warning'><h5>Your selection has no results! Please select a different variant</h5></Alert>
 	}
 	else
 	{
-	    graph =	<ForceTree data={this.state.graph_items} />
+	    graph = <ForceTree data={this.state.graph_items} />
 	}
+	let table;
+	if (this.state.table_nodes == 1) {
+	    table = <Alert variant='warning'><h5>Your selection has no results! Please select a different variant/annotation/biosample</h5></Alert>
+	}
+	else
+	{
+	    table = <TableView data={this.state.table_items} />
+	}
+	let genomeBrowser;
+	genomeBrowser = <AppIgv />
 	return (
-		<Container >
+		<Container fluid>
 		<Card.Header>
-		<br/>
 		<Row>
 		<Col md={{ span: 6, offset: 7 }}>
 		<SearchForm onSearch={this.performSearch} />
 		</Col>
 		</Row>
-		<Row>
-		<Col md={{ span: 6, offset: 7 }}>
-		<h6 className="text-muted">examples:rs231361,chr8:118184783</h6>
-		</Col>
-		</Row>
-		<h5> Annotation Filter</h5>
-		<AnnotationFilter onFilter={this.performAnnotationFilter}/>
-		<h5> Biosample Filter</h5>
-		<BiosampleFilter onFilter={this.performBiosampleFilter}/>
 		</Card.Header>
-		<Card border="secondary" style={{padding: '10px'}}>
-		<LegendOrdinal scale={tissues} direction="row" labelMargin="0 5px 0 5px" shapeMargin="1px 0 0"/>
-		<br/>
-		</Card>
-		<Row className="justify-content-md-center">
-		{graph}
+		<Form>
+		<Col>
+		<Tabs defaultActiveKey="graph" id="uncontrolled-tab-example">
+		<Tab eventKey="graph" title="Target Gene Graph" unmountOnExit="true">
+		<Row>
+		<Col>
+		<h5>Type of Target Gene</h5>
+		<TargetGeneFilter onFilter={this.performTargetGeneFilter}/>
+		<h5>Allelic Effect Filter</h5>
+		<AllelicEffectFilters onFilter={this.performAllelicEffectFilters}/>
+		<h5>Tissue Legend</h5>
+		<LegendOrdinal scale={tissues} direction="row" labelMargin="0 15px 0 5px" shapeMargin="1px 0 0"/>
+		</Col>
+                <Col>
+	        {graph}
+	        </Col>
 		</Row>
+	        </Tab>
+		<Tab eventKey="table" title="Table" unmountOnExit="true">
+		<Row>
+		{table}
+	        </Row>
+		</Tab>
+		<Tab eventKey="genomebrowser" title="Genome Browser" unmountOnExit="true">
+		<Row className="justify-content-md-center">
+		<Alert variant="success">
+		<Alert.Heading>Genome Browser showing links between distal elements and target genes coming soon...</Alert.Heading>
+		</Alert>
+		</Row>
+		</Tab>
+		</Tabs>
+		</Col>
+		</Form>
 		<Card.Footer className="text-muted">
 		&copy;2019 Diabetes Epigenome Atlas
 	        </Card.Footer>

@@ -17,17 +17,22 @@ export default class SearchForm extends Component {
 	//console.log(this.query.value);
 	e.currentTarget.reset();
     }  
-    render() {  
+    render() {
+	var id = this.state;
+	var variant = id['searchText'];
 	return (
 		<Form inline onSubmit={this.handleSubmit}>
-		<FormControl className="mr-md-2" type="search" 
+		
+		<Form.Label style={{padding: '10px'}}><h4>Search Variants or Coordinates</h4></Form.Label>
+		<br/>
+		<span>
+		<FormControl type="text" className="mr-md-2" 
             onChange={this.onSearchChange}
-            name="search"
 	    ref={(input) => this.query = input}
+	    defaultValue={variant}
             placeholder="Search..." />
 		<Button variant="outline-primary" size="sm" type="submit" id="submit">Search</Button>
-		<div>
-		</div>
+		</span>
 		</Form>
 	
     );
