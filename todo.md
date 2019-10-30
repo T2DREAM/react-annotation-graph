@@ -13,7 +13,7 @@ This list is based on feedback for react annotation graph V0.2 by T2D AMP consor
 - [x] Links weighted by whether variant has allelic effect on cell type. In addition, hovering over rsid to tissue/cell type links gives annotation types
 - [x] Genes weighted by number of cell types/biosamples linking to that gene 
 * Make the application aesthetically nicer
-  - [ ] Move filters as side-bar 
+  - [x] Move filters as side-bar 
 - [ ] Highlight nodes/links for selection i.e. variant <-> tissues <-> genes
 * Navigation 
   - [x] Mouse wheel/click: zoom in/out
