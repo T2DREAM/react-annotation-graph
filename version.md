@@ -26,15 +26,12 @@
 * Genes weighted by number of cell types/biosamples linking to that gene 
 * Make the application aesthetically nicer
   * Move filters as side-bar 
-
 * Navigation 
   * Mouse wheel/click: zoom in/out
   * Node left click: redirect to annotation on DGA
   * Hover over the node: for node label aka. tissue, cell type or annotation accession
   * Hover over the link (variant - tissues or tissues - cell type): for annotation type
   * Filter buttons: Filter by type of target gene aka method
-  
-
 ### Tabular Display
 * All the annotations that intersect the variants searched are displayed (in case of chromatin state only active states are displayed)
 * Sort & Filter the table by Biosample, Annotation Type, State
