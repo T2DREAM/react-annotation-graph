@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import React, { Component } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -11,10 +12,12 @@ import TableView from './Components/TabularView';
 import AppIgv from './Components/GenomeBrowser';
 import TargetGeneFilter from './Components/TargetGeneFilter';
 import './bootstrap.min.css';
+import Loader from 'react-loader-spinner';
+import "./react-spinner-loader.css"
 import Tabs from 'react-bootstrap/Tabs';
-import Form from 'react-bootstrap/Form';
 import Tab from 'react-bootstrap/Tabs';
 import Alert from 'react-bootstrap/Alert';
+import { ClipLoader } from 'react-spinners';
 import { LegendOrdinal } from '@vx/legend';
 import { scaleOrdinal } from '@vx/scale';
 import './react-bootstrap-table2.min.css';
@@ -28,9 +31,10 @@ export default class App extends Component {
       super();
       this.performUrl = this.performUrl.bind(this);
       this.state = {
-	  graph_items: {links:[{source:"Loading...",target:"Loading..."}],nodes:[{color: "#170451", id: undefined, label: "Loading...", level: 1,link: "", path: "Loading...",biosample:"", type:"", name:"Loading...", state_len: 3, annotation_type: "-", accession_ids: "-",}]},
-	  table_items: {links:[{source:"Loading...",target:"Loading..."}],nodes:[{color: "#170451", id: undefined, label: "Loading...", leaf: "Loading...", level: 0,link: "", name: "", path: "Loading...",biosample:"", type:""}]},
+	  graph_items: {links:[{source:"Loading...",target:"Loading..."}], nodes:[{color: "#170451", id: undefined, label: "Loading...", level: 1,link: "", path: "Loading...",biosample:"", type:"", name:"Loading...", state_len: 3, annotation_type: "-", accession_ids: "-",}]},
+	  table_items: {links:[{source:"Loading...",target:"Loading..."}],nodes:[{color: 'black', id: "Loading", label: "Loading...", leaf: "Loading...", level: 1,link: "", name: "", path: "Loading...",biosample:"", type:""}]},
 	  newQuery: 'rs963740',
+	  loading: true,
       };
   }
 //fetch variant graph data from DGA API, rs7903146 is default query variant
@@ -44,9 +48,7 @@ export default class App extends Component {
     performTargetGeneFilter = (targetgene_filter) => {
 	var arr1 = [];
 	Object.keys(targetgene_filter).map(function(keyName) {
-	    if (targetgene_filter[keyName] === true) {
-		return (arr1 = arr1.concat(keyName));
-	    }
+	    if (targetgene_filter[keyName] === true) {return (arr1 = arr1.concat(keyName));}
 	})
 	this.setState({
 	    targetgene: arr1
@@ -55,9 +57,7 @@ export default class App extends Component {
     performAllelicEffectFilters = (alleliceffect_filter) => {
 	var arr1 = [];
 	Object.keys(alleliceffect_filter).map(function(keyName) {
-	    if (alleliceffect_filter[keyName] === true) {
-		return (arr1 = arr1.concat(keyName));
-	    }
+	    if (alleliceffect_filter[keyName] === true) {return (arr1 = arr1.concat(keyName));}
 	})
 	this.setState({
 	    alleliceffect: arr1
@@ -81,7 +81,7 @@ export default class App extends Component {
 	    }
 	};
 	//var endpoint = (this.state.targetgene ?  this.state.targetgene  : 'getAnnotationVariantGraphNew');
-	axios.post('https://cors-anywhere.herokuapp.com/http://www.diabetesepigenome.org:8080/getAnnotationVariantGraphNew', postData, axiosConfig)
+	this.setState({ loading: true }, () =>{ axios.post('https://cors-anywhere.herokuapp.com/http://www.diabetesepigenome.org:8080/getAnnotationVariantGraphNew', postData, axiosConfig)
 	    .then(response => {
 		const links = response.data.links;
 		const nodes1 = response.data.nodes;
@@ -103,16 +103,18 @@ export default class App extends Component {
 		    };
 		    nodes.push(node);
 		});
-		//console.log(links);
-		console.log(nodes);
 		this.setState({
 		    graph_items: {nodes, links},
 		    graph_links: links,
+		    graph_nodes: nodes,
+		    loading: false,
 		});
-	    })
+	    })	      
 	    .catch(error => {
 		console.log('Error fetching and parsing data', error);
 	    });
+					      });
+	   
 	axios.post('https://cors-anywhere.herokuapp.com/http://www.diabetesepigenome.org:8080/getAnnotationVariantAllGraph', postData1, axiosConfig)
 	    .then(response2 => {
 		const nodes1 = response2.data.nodes;
@@ -148,13 +150,10 @@ export default class App extends Component {
     }
     //search & variant graph components
     render() {
+	console.log(this.state.loading);
 	let graph;
 	if (this.state.graph_links == 0) {
 	    graph = <Alert variant='warning'><h5>Your selection has no results! Please select a different variant</h5></Alert>
-	}
-	else
-	{
-	    graph = <ForceTree data={this.state.graph_items} />
 	}
 	let table;
 	if (this.state.table_nodes == 1) {
@@ -175,12 +174,11 @@ export default class App extends Component {
 		</Col>
 		</Row>
 		</Card.Header>
-		<Form>
 		<Col>
 		<Tabs defaultActiveKey="graph" id="uncontrolled-tab-example">
 		<Tab eventKey="graph" title="Target Gene Graph" unmountOnExit="true">
-		<Row>
-		<Col>
+		<Row style={{height: '800px'}}>
+		<Col md={{ span: 2}}>
 		<h5>Type of Target Gene</h5>
 		<TargetGeneFilter onFilter={this.performTargetGeneFilter}/>
 		<h5>Allelic Effect Filter</h5>
@@ -189,7 +187,7 @@ export default class App extends Component {
 		<LegendOrdinal scale={tissues} direction="row" labelMargin="0 15px 0 5px" shapeMargin="1px 0 0"/>
 		</Col>
                 <Col>
-	        {graph}
+		{this.state.loading ? <div style ={{position: 'absolute', left: '50%', top: '50%',transform: 'translate(-50%, -50%)'}}><Loader type="Bars" color="#00BFFF" height={100} width={100} /></div> : <ForceTree data={this.state.graph_items} />}
 	        </Col>
 		</Row>
 	        </Tab>
@@ -207,7 +205,6 @@ export default class App extends Component {
 		</Tab>
 		</Tabs>
 		</Col>
-		</Form>
 		<Card.Footer className="text-muted">
 		&copy;2019 Diabetes Epigenome Atlas
 	        </Card.Footer>
