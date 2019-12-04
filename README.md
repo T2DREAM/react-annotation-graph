@@ -1,5 +1,5 @@
 
-# Interactive graphical view of all DGA annotations
+# Interactive graphical view of DGA annotations
 
 ### This application links Co-accessibility of distal regulatory variants to putative target genes 
 Link - http://www.apps.t2depigenome.org/react-annotation-graph
