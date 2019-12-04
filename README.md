@@ -4,9 +4,7 @@
 ### This application links Co-accessibility of distal regulatory variants to putative target genes 
 Link - http://www.apps.t2depigenome.org/react-annotation-graph
 
-![](https://github.com/T2DREAM/react-annotation-graph/blob/master/1.png)
-![](https://github.com/T2DREAM/react-annotation-graph/blob/master/2.png)
-![](https://github.com/T2DREAM/react-annotation-graph/blob/master/3.png)
+![](https://github.com/T2DREAM/react-annotation-graph/blob/master/graphical_interface.png)
 
 ### Graphical Display 
 * JavaScript module that uses force graph to display an interactive tree graph of all the **Target Gene Predictions** of all annotation data currently in DGA for various Diabetes releveant and complication tissues and cell types in the DGA for a query genetic variant
@@ -25,7 +23,7 @@ Link - http://www.apps.t2depigenome.org/react-annotation-graph
   
 
 ### Tabular Display 
-![](https://github.com/T2DREAM/react-annotation-graph/blob/master/4.png)
+![](https://github.com/T2DREAM/react-annotation-graph/blob/master/tabular_display.png)
 
 * All the annotations that intersect the variants searched are displayed (in case of chromatin state only active states are displayed)
 * Sort & Filter the table by Biosample, Annotation Type, State
