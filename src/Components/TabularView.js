@@ -28,13 +28,13 @@ class TableView extends React.Component {
 	}, {
 	    dataField: 'accession_ids',
 	    text: 'Accessions',
-	    formatter: (rowContent, row) => {
-		var array = rowContent.split(',').map(item => item.trim())
-		var linkArray = array.join('&accession=')
-		return (
-			<a target="_blank" rel="noopener noreferrer" href= {'https://www.diabetesepigenome.org/search/?type=Annotation&accession=' +  linkArray }>{ rowContent }</a>
-		)
-	    }
+	    //formatter: (rowContent, row) => {
+		//var array = rowContent.split(',').map(item => item.trim())
+		//var linkArray = array.join('&accession=')
+		//return (
+		//	<a target="_blank" rel="noopener noreferrer" href= {'https://www.diabetesepigenome.org/search/?type=Annotation&accession=' +  linkArray }>{ rowContent }</a>
+		//)
+	    //}
 	}, {
 	    dataField: 'annotation_type',
 	    text: 'Annotation Type',
@@ -49,9 +49,9 @@ class TableView extends React.Component {
 		    props => (
 			    <div>
 			    <br />
-			    <ExportCSVButton className="btn-sm" className="btn-primary" { ...props.csvProps }>Download Results!</ExportCSVButton>
+			    <ExportCSVButton className="btn-sm" { ...props.csvProps }>Download Results!</ExportCSVButton>
 			    <hr />
-			    <BootstrapTable { ...props.baseProps }  filter={ filterFactory() } selectRow={ this.selectRow } dataFormat={this.CellFormatter} />
+			    <BootstrapTable { ...props.baseProps }  filter={ filterFactory() } selectRow={ this.selectRow } />
 			    </div>
 		    )
 		}

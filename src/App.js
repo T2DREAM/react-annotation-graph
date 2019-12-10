@@ -10,6 +10,7 @@ import ForceTree from './Components/ForceTree';
 import AllelicEffectFilters from './Components/AllelicEffectFilters';
 import TableView from './Components/TabularView';
 import AppIgv from './Components/GenomeBrowser';
+import TissueLabelSwitch from './Components/TissueLabelSwitch';
 import TargetGeneFilter from './Components/TargetGeneFilter';
 import './bootstrap.min.css';
 import Loader from 'react-loader-spinner';
@@ -17,13 +18,16 @@ import "./react-spinner-loader.css"
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tabs';
 import Alert from 'react-bootstrap/Alert';
-import { ClipLoader } from 'react-spinners';
 import { LegendOrdinal } from '@vx/legend';
 import { scaleOrdinal } from '@vx/scale';
 import './react-bootstrap-table2.min.css';
 const tissues = scaleOrdinal({
     domain: ['pancreas'],
     range: ['#add8e6']
+});
+const cells = scaleOrdinal({
+    domain: ['pancreatic cells'],
+    range: ['#0eb8f0']
 });
 export default class App extends Component {
 //Initiaite state for nodes & links (loading for now)  
@@ -62,6 +66,13 @@ export default class App extends Component {
 	this.setState({
 	    alleliceffect: arr1
 	},  () => (this.performUrl()))
+    }
+    saveCanvas() {
+	const canvasSave = document.getElementById('graph');
+	const d = canvasSave.toDataURL('image/png');
+	const w = window.open('about:blank', 'image from canvas');
+	w.document.write("<img src='"+d+"' alt='from canvas'/>");
+	console.log('Saved!');
     }
     performUrl = () => {
 	var postData = {
@@ -173,18 +184,25 @@ export default class App extends Component {
 		<SearchForm onSearch={this.performSearch} />
 		</Col>
 		</Row>
+		<Row>
+		<Col md={{ span: 6, offset: 7 }}>
+		{this.state.graph_links ? <h5>Sucess! Searched {this.state.newQuery}</h5> : <h5></h5>}
+	        </Col>
+		</Row>
 		</Card.Header>
 		<Col>
 		<Tabs defaultActiveKey="graph" id="uncontrolled-tab-example">
 		<Tab eventKey="graph" title="Target Gene Graph" unmountOnExit="true">
-		<Row style={{height: '800px'}}>
+		<Row style={{height: '1000px'}}>
 		<Col md={{ span: 2}}>
 		<h5>Type of Target Gene</h5>
 		<TargetGeneFilter onFilter={this.performTargetGeneFilter}/>
 		<h5>Allelic Effect Filter</h5>
-		<AllelicEffectFilters onFilter={this.performAllelicEffectFilters}/>
+		<AllelicEffectFilters onFilter={this.performAllelicEffectFilters} style={{ marginBottom: '1rem' }} />
 		<h5>Tissue Legend</h5>
 		<LegendOrdinal scale={tissues} direction="row" labelMargin="0 15px 0 5px" shapeMargin="1px 0 0"/>
+		<h5>Cell Legend</h5>
+		<LegendOrdinal scale={cells} direction="row" labelMargin="0 15px 0 5px" shapeMargin="1px 0 0"/>
 		</Col>
                 <Col>
 		{this.state.loading ? <div style ={{position: 'absolute', left: '50%', top: '50%',transform: 'translate(-50%, -50%)'}}><Loader type="Bars" color="#00BFFF" height={100} width={100} /></div> : <ForceTree data={this.state.graph_items} />}
