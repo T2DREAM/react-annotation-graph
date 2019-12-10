@@ -38,7 +38,7 @@ This list is based on feedback for react annotation graph V0.2 by T2D AMP consor
 - [x] Different color legends for tissues and cell types
 - [ ] Filter to show/hide tissue/cell type label
 - [ ] Nodes weighted by quatitative scores/user-selected thresholds for statistical cutoffs (co-accesibility scores) 
-- [ ] click on a tissue/cell type to focus on thatsubtree and have the other subtrees disappear
+- [ ] Click on a tissue/cell type to focus on thatsubtree and have the other subtrees disappear
 - [ ] Data driven cell hierarchy - for example,based on the proximity of global expression profiles or metabolic processes (fat vs. glucose oxidation)
 - [ ] Apart from cell hierarchy option of developmental/physiological hierarchy based on insulin-responsive or non-responsive cell lines, Or whether the cells were cultured or came from a living tissue
 - [ ] Spatially oraginze the force three distance based on distance between the target gene and promoter/variant
