@@ -32,7 +32,7 @@ This list is based on feedback for react annotation graph V0.2 by T2D AMP consor
 ####  Interactive genome browser showing links between distal elements and target genes  
 - [ ] A JavaScript module using D3.js which will display links between genomic sites such as chromatin loops (from Hi-C/CHi-C) or co-accessibility (from single cell data).  This module, will display a genomic region which includes tracks containing ‘arcs’ between two linked loci and where the ‘arc’ height (or weight) is based on a value (e.g. the significance of a Hi-C loop) 
 
-This list is based on feedback for react annotation graph V1.0 by T2D AMP consortium members on December 4th 2019
+### This list is based on feedback for react annotation graph V1.0 by T2D AMP consortium members on December 4th 2019
 
 - [x] Clickable redirected to DGA for links that have variant has allelic effect on cell type
 - [x] Different color legends for tissues and cell types
