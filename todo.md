@@ -3,7 +3,7 @@
 
 This list is based on feedback for react annotation graph V0.2 by T2D AMP consortium members
 
- ### Graphical Display 
+ #### Graphical Display 
 - [x] JavaScript module that uses force graph to display an interactive tree graph of all the **Target Gene Predictions** of all annotation data currently in DGA for various Diabetes releveant and complication tissues and cell types in the DGA for a query genetic variant
 - [x] User can click on an annotation to re-direct to the DGA page to obtain more detailed information for that annotation
 * Filters
@@ -23,11 +23,23 @@ This list is based on feedback for react annotation graph V0.2 by T2D AMP consor
   - [x] Filter buttons: Filter by type of target gene aka method
   
 
-### Tabular Display
+#### Tabular Display
 - [x] All the annotations that intersect the variants searched are displayed (in case of chromatin state only active states are displayed)
 - [x] Sort & Filter the table by Biosample, Annotation Type, State
 - [x] Download results as csv file
 - [x] User can click on an annotation to re-direct to the DGA page to obtain more detailed information for that annotation
 
-###  Interactive genome browser showing links between distal elements and target genes  
+####  Interactive genome browser showing links between distal elements and target genes  
 - [ ] A JavaScript module using D3.js which will display links between genomic sites such as chromatin loops (from Hi-C/CHi-C) or co-accessibility (from single cell data).  This module, will display a genomic region which includes tracks containing ‘arcs’ between two linked loci and where the ‘arc’ height (or weight) is based on a value (e.g. the significance of a Hi-C loop) 
+
+This list is based on feedback for react annotation graph V1.0 by T2D AMP consortium members on December 4th 2019
+
+- [x] Clickable redirected to DGA for links that have variant has allelic effect on cell type
+- [x] Different color legends for tissues and cell types
+- [ ] Nodes weighted by quatitative scores/user-selected thresholds for statistical cutoffs (co-accesibility scores) 
+- [ ] click on a tissue/cell type to focus on thatsubtree and have the other subtrees disappear
+- [ ] Data driven cell hierarchy - for example,based on the proximity of global expression profiles or metabolic processes (fat vs. glucose oxidation)
+- [ ] Apart from cell hierarchy option of developmental/physiological hierarchy based on insulin-responsive or non-responsive cell lines, Or whether the cells were cultured or came from a living tissue
+- [ ] Spatially oraginze the force three distance based on distance between the target gene and promoter/variant
+
+
