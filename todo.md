@@ -41,5 +41,6 @@ This list is based on feedback for react annotation graph V0.2 by T2D AMP consor
 - [ ] Click on a tissue/cell type to focus on thatsubtree and have the other subtrees disappear
 - [ ] Show distance between the target gene and variant
 - [ ] Color code allelic effects (red -ve, blue +ve)
+- [ ] Tabular view score filter
 
 
