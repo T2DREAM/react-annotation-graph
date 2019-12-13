@@ -11,7 +11,7 @@ class ForceTree extends React.Component {
     }
     render(){
 	const results = this.props.data;
-	console.log(results);
+	const labelswitch = this.props.label;
 	return(
 	<div>    
 	<ForceGraph2D
@@ -35,7 +35,7 @@ class ForceTree extends React.Component {
 	    nodeResolution = {2}
 	    linkWidth = { link => (link.width * 2) + 1 }
 	    linkLabel = { link => link.label }
-	    nodeCanvasObject={(node, ctx, globalScale) => {if (node.level === 1) { const label = node.label; const fontSize = 14/globalScale; ctx.font = `${fontSize}px Sans-Serif`; ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = 'black'; ctx.fillText(label, node.x, node.y);} else { ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';}}}
+	    nodeCanvasObject={(node, ctx, globalScale) => {if (labelswitch === false && node.level === 2) { ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';}  else { const label = node.label; const fontSize = 14/globalScale; ctx.font = `${fontSize}px Sans-Serif`; ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = 'black'; ctx.fillText(label, node.x, node.y);}}}
 	    nodeLabel= {node => `${node.name}`}
 	    d3VelocityDecay={0.1}
 	    rendererConfig={{ preserveDrawingBuffer: true }}

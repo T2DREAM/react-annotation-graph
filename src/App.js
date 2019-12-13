@@ -35,10 +35,11 @@ export default class App extends Component {
       super();
       this.performUrl = this.performUrl.bind(this);
       this.state = {
-	  graph_items: {links:[{source:"Loading...",target:"Loading..."}], nodes:[{color: "#170451", id: undefined, label: "Loading...", level: 1,link: "", path: "Loading...",biosample:"", type:"", name:"Loading...", state_len: 3, annotation_type: "-", accession_ids: "-",}]},
+	  graph_items: {links:[{source:"Loading...",target:"Loading..."}], nodes:[{color: "#170451", id: undefined, label: "Loading...", level: 1,link: "", path: "Loading...",biosample:"", type:"", name:"Loading...", state_len: 3, annotation_type: "-", accession_ids: "-", score:"-"}]},
 	  table_items: {links:[{source:"Loading...",target:"Loading..."}],nodes:[{color: 'black', id: "Loading", label: "Loading...", leaf: "Loading...", level: 1,link: "", name: "", path: "Loading...",biosample:"", type:""}]},
 	  newQuery: 'rs963740',
 	  loading: true,
+	  labelswitch: false,
       };
   }
 //fetch variant graph data from DGA API, rs7903146 is default query variant
@@ -57,6 +58,12 @@ export default class App extends Component {
 	this.setState({
 	    targetgene: arr1
 	},  () => (this.performUrl()))
+    }
+    performTissueLabelSwitch = (label_filter) => {
+	Object.entries(label_filter).map(([key,value]) => {
+	     this.setState({
+		 labelswitch: value
+	     },  () => (this.performUrl()))})
     }
     performAllelicEffectFilters = (alleliceffect_filter) => {
 	var arr1 = [];
@@ -97,7 +104,7 @@ export default class App extends Component {
 		const links = response.data.links;
 		const nodes1 = response.data.nodes;
 		const nodes = [];
-		nodes1.forEach(({accession_ids, annotation_type, biosample, color, id, label, link, name, type, path, level, state_len}) => {
+		nodes1.forEach(({accession_ids, annotation_type, biosample, color, id, label, link, name, type, path, level, state_len, score}) => {
 		    const node = {
 			accession_ids,
 			annotation_type,
@@ -110,7 +117,8 @@ export default class App extends Component {
 			type,
 			path,
 			level,
-			state_len
+			state_len,
+			score
 		    };
 		    nodes.push(node);
 		});
@@ -124,8 +132,7 @@ export default class App extends Component {
 	    .catch(error => {
 		console.log('Error fetching and parsing data', error);
 	    });
-					      });
-	   
+					      });	   
 	axios.post('https://cors-anywhere.herokuapp.com/http://www.diabetesepigenome.org:8080/getAnnotationVariantAllGraph', postData1, axiosConfig)
 	    .then(response2 => {
 		const nodes1 = response2.data.nodes;
@@ -161,7 +168,6 @@ export default class App extends Component {
     }
     //search & variant graph components
     render() {
-	console.log(this.state.loading);
 	let graph;
 	if (this.state.graph_links == 0) {
 	    graph = <Alert variant='warning'><h5>Your selection has no results! Please select a different variant</h5></Alert>
@@ -199,13 +205,15 @@ export default class App extends Component {
 		<TargetGeneFilter onFilter={this.performTargetGeneFilter}/>
 		<h5>Allelic Effect Filter</h5>
 		<AllelicEffectFilters onFilter={this.performAllelicEffectFilters} style={{ marginBottom: '1rem' }} />
+		<h5>Display Tissue/Cell Type Label</h5>
+		<TissueLabelSwitch onFilter={this.performTissueLabelSwitch}/>
 		<h5>Tissue Legend</h5>
 		<LegendOrdinal scale={tissues} direction="row" labelMargin="0 15px 0 5px" shapeMargin="1px 0 0"/>
 		<h5>Cell Legend</h5>
 		<LegendOrdinal scale={cells} direction="row" labelMargin="0 15px 0 5px" shapeMargin="1px 0 0"/>
 		</Col>
                 <Col>
-		{this.state.loading ? <div style ={{position: 'absolute', left: '50%', top: '50%',transform: 'translate(-50%, -50%)'}}><Loader type="Bars" color="#00BFFF" height={100} width={100} /></div> : <ForceTree data={this.state.graph_items} />}
+		{this.state.loading ? <div style ={{position: 'absolute', left: '50%', top: '50%',transform: 'translate(-50%, -50%)'}}><Loader type="Bars" color="#00BFFF" height={100} width={100} /></div> : <ForceTree data={this.state.graph_items} label={this.state.labelswitch} />}
 	        </Col>
 		</Row>
 	        </Tab>
