@@ -1,0 +1,28 @@
+.graph-tooltip {
+  position: absolute;
+  /* transform: translate(-50%, 25px); */
+  font-family: Helvetica;
+  font-size: 14px;
+  padding: 4px;
+  border-radius: 3px;
+  border: 1px solid rgb(24, 24, 24);
+  box-shadow: 2px 2px 2px rgba(24, 24, 24, 0.4);
+  color: #eee;
+  white-space: pre-line;
+  word-wrap: break-word;
+  background: rgba(0,0,0,0.65);
+  visibility: hidden; /* by default */
+}
+
+.grabbable {
+  cursor: move;
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+.grabbable:active {
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
+}
