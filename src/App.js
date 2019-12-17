@@ -137,7 +137,7 @@ export default class App extends Component {
 	    .then(response2 => {
 		const nodes1 = response2.data.nodes;
 		const nodes = [];
-		nodes1.forEach(({accession_ids, annotation_type, biosample, color, id, label, link, name, type, path, level, table_id}) => {
+		nodes1.forEach(({accession_ids, annotation_type, biosample, color, id, label, link, name, type, path, level, table_id, score}) => {
 		    const node = {
 			accession_ids,
 			annotation_type,
@@ -150,7 +150,8 @@ export default class App extends Component {
 			type,
 			path,
 			table_id,
-			level
+			level,
+			score
 		    };
 		    nodes.push(node);
 		});
