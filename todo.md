@@ -37,6 +37,7 @@ This list is based on feedback for react annotation graph V0.2 by T2D AMP consor
 - [x] Clickable redirected to DGA for links that have variant has allelic effect on cell type
 - [x] Different color legends for tissues and cell types
 - [x] Filter to show/hide tissue/cell type label
+- [x] Organize node labels to display accessions, evidence and scores
 - [ ] Filter for statistical cutoffs (co-accesibility scores) 
 - [ ] Click on a tissue/cell type to focus on thatsubtree and have the other subtrees disappear
 - [ ] Show distance between the target gene and variant
