@@ -12,7 +12,8 @@ class TableView extends React.Component {
 	    'accessible chromatin': 'accessible chromatin',
 	    'chromatin state': 'chromatin state',
 	    'binding sites': 'binding sites',
-	    'target gene predictions': 'target gene predictions'
+	    'target gene predictions': 'target gene predictions',
+	    'variant allelic effects': 'variant allelic effects'
 	};
 	const { ExportCSVButton } = CSVExport;
 	const columns = [{
@@ -22,9 +23,13 @@ class TableView extends React.Component {
 	    filter: textFilter()
 	}, {
 	    dataField: 'label',
-	    text: 'State',
+	    text: 'Description',
 	    sort: true,
 	    filter: textFilter()
+	}, {
+	    dataField: 'score',
+	    text: 'Value',
+	    sort: true
 	}, {
 	    dataField: 'accession_ids',
 	    text: 'Accessions',
