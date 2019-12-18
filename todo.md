@@ -38,10 +38,11 @@ This list is based on feedback for react annotation graph V0.2 by T2D AMP consor
 - [x] Different color legends for tissues and cell types
 - [x] Filter to show/hide tissue/cell type label
 - [x] Organize node labels to display accessions, evidence and scores
+- [x] Show distance between the target gene and variant (in label)
+- [x] Tabular view score filter
+- [ ] Color code allelic effects (red -ve, blue +ve)
 - [ ] Filter for statistical cutoffs (co-accesibility scores) 
 - [ ] Click on a tissue/cell type to focus on thatsubtree and have the other subtrees disappear
-- [ ] Show distance between the target gene and variant
-- [ ] Color code allelic effects (red -ve, blue +ve)
-- [x] Tabular view score filter
+
 
 
