@@ -1,0 +1,143 @@
+{
+  "nodes": [
+    {
+      "accession_ids": ["DSR299XDW","DSR376KYK"],
+      "annotation_type": "target gene predictions",
+      "biosample": ["islet of Langerhans","pancreatic beta cell"],
+      "color": "#8b0000",
+      "id": "ABCC8",
+      "label": "ABCC8",
+      "link": "accession=DSR299XDW&accession=DSR376KYK",
+      "name": [
+          "DSR299XDW",
+	  "DSR376KYK"
+      ],
+      "type": "annotation"
+    },
+    {
+      "accession_ids": ["DSR299XDW","DSR376KYK"]
+      "annotation_type": "target gene predictions",
+      "biosample": ["islet of Langerhans","pancreatic beta cell"]
+      "color": "#8b0000",
+      "id": "KCNJ11",
+      "label": "KCNJ11",
+      "link": "accession=DSR299XDW&accession=DSR376KYK",
+      "name": [
+          "DSR299XDW",
+	  "DSR376KYK"
+      ],
+      "type": "annotation"
+    },
+    {
+      "accession_ids": ["-"],
+      "annotation_type": "-",
+      "biosample": "pancreatic alpha cell",
+      "color": "#8b0000",
+      "id": "pancreatic alpha cell",
+      "label": "pancreatic alpha cell",
+      "link": "biosample_term_name=pancreatic alpha cell",
+      "name": "pancreatic alpha cell",
+      "type": "cell"
+    },
+    {
+      "accession_ids": ["DSR299XDW"],
+      "annotation_type": "target gene predictions",
+      "biosample": ["islet of Langerhans"],
+      "color": "#8b0000",
+      "id": "NCR3LG1",
+      "label": "NCR3LG1",
+      "link": "accession=DSR299XDW",
+      "name": [
+        "DSR299XDW"
+      ],
+      "type": "annotation"
+    },
+    {
+      "accession_ids": ["DSR376KYK"],
+      "annotation_type": "target gene predictions",
+      "biosample": ["pancreatic beta cell"],
+      "color": "#8b0000",
+      "id": "RPS13",
+      "label": "RPS13",
+      "link": "accession=DSR376KYK",
+      "name": [
+        "DSR376KYK"
+      ],
+      "type": "annotation"
+    },
+    {
+      "accession_ids": ["-"],
+      "annotation_type": "-",
+      "biosample": ["pancreatic alpha cell"],
+      "color": "#8b0000",
+      "id": "pancreas",
+      "label": "pancreas",
+      "link": "biosample_term_name=pancreas",
+      "name": ["pancreas"],
+      "type": "biosample"
+    },
+    {
+      "accession_ids": ["-"],
+      "annotation_type": "-",
+      "biosample": ["pancreatic beta cell"],
+      "color": "#8b0000",
+      "id": "pancreatic beta cell",
+      "label": "pancreatic beta cell",
+      "link": "biosample_term_name=pancreatic beta cell",
+      "name": ["pancreatic beta cell"],
+      "type": "cell"
+    },
+    {
+      "accession_ids": ["DSR014OEB","DSR376KYK"],
+      "annotation_type": "target gene predictions",
+      "biosample": ["pancreatic alpha cell","pancreatic beta cell"],
+      "color": "#8b0000",
+      "id": "NUCB2",
+      "label": "NUCB2",
+      "link": "accession=DSR014OEB&accession=DSR376KYK",
+      "name": [
+          "DSR014OEB",
+	  "DSR376KYK"
+      ],
+      "type": "annotation"
+    },
+    {
+      "accession_ids": ["-"],
+      "annotation_type": "-",
+      "biosample": ["islet of Langerhans"],
+      "color": "#8b0000",
+      "id": "islet of Langerhans",
+      "label": "islet of Langerhans",
+      "link": "biosample_term_name=islet of Langerhans",
+      "name": "islet of Langerhans",
+      "type": "cell"
+    },
+    {
+      "accession_ids": ["-"],
+      "annotation_type": "-",
+      "biosample": ["-"],
+      "color": "#170451",
+      "id": "rs67254669",
+      "label": "rs67254669",
+      "link": "region=rs67254669&genome=GRCh37",
+      "name": "rs67254669",
+      "type": "rsid"
+    }
+  ],
+    "links":[
+	{"source":"islet of Langerhans","target":"ABCC8"},
+	{"source":"islet of Langerhans","target":"KCNJ11"},
+	{"source":"pancreas","target":"pancreatic alpha cell"},
+	{"source":"pancreatic beta cell","target":"KCNJ11"},
+	{"source":"islet of Langerhans","target":"NCR3LG1"},
+	{"source":"pancreatic beta cell","target":"RPS13"},
+	{"source":"rs67254669","target":"pancreas"},
+	{"source":"pancreas","target":"pancreatic beta cell"},
+	{"source":"pancreatic beta cell","target":"ABCC8"},
+	{"source":"pancreatic alpha cell","target":"NUCB2"},
+	{"source":"pancreas","target":"islet of Langerhans"},
+	{"source":"pancreatic beta cell","target":"NUCB2"}
+	]
+    
+    
+}

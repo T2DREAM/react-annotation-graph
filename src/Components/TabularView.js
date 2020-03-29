@@ -13,7 +13,9 @@ class TableView extends React.Component {
 	    'chromatin state': 'chromatin state',
 	    'binding sites': 'binding sites',
 	    'target gene predictions': 'target gene predictions',
-	    'variant allelic effects': 'variant allelic effects'
+	    'variant allelic effects': 'variant allelic effects',
+	    'gene expression': 'gene expression',
+	    'eQTL':'eQTL'
 	};
 	const { ExportCSVButton } = CSVExport;
 	const columns = [{

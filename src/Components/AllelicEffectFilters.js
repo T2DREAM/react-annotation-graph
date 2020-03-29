@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Row from 'react-bootstrap/Row';
-import Form from 'react-bootstrap/Form'
+import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 class AllelicEffectFilters extends Component {
   constructor(props) {

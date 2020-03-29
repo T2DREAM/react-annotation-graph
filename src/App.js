@@ -7,27 +7,28 @@ import Card from 'react-bootstrap/Card';
 import axios from 'axios';
 import SearchForm from './Components/SearchForm';
 import ForceTree from './Components/ForceTree';
-import AllelicEffectFilters from './Components/AllelicEffectFilters';
 import TableView from './Components/TabularView';
-import AppIgv from './Components/GenomeBrowser';
 import TissueLabelSwitch from './Components/TissueLabelSwitch';
 import TargetGeneFilter from './Components/TargetGeneFilter';
+import AssemblyFilter from './Components/AssemblyFilter';
 import './bootstrap.min.css';
 import Loader from 'react-loader-spinner';
 import "./react-spinner-loader.css"
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tabs';
+import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import { LegendOrdinal } from '@vx/legend';
 import { scaleOrdinal } from '@vx/scale';
+import canvasToImage from 'canvas-to-image';
 import './react-bootstrap-table2.min.css';
-const tissues = scaleOrdinal({
-    domain: ['pancreas'],
-    range: ['#add8e6']
+const organs = scaleOrdinal({
+    domain: ['pancreas', 'liver', 'kidney', 'heart', 'connective tissues', 'other tissues'],
+    range: ['#add8e6', '#ffd700', '#7fff00', '#ff0000', '#66ffff', '#d6d1d1']
 });
-const cells = scaleOrdinal({
-    domain: ['pancreatic cells'],
-    range: ['#0eb8f0']
+const annotations = scaleOrdinal({
+    domain: ['allelic effect', 'accessible chromatin', 'allelic effect & accessible chromatin', 'eQTL', 'no evidence'],
+    range: ['#bfcce6', '#738fc7', '#003399', '#FFA500', '#BEBEBE']
 });
 export default class App extends Component {
 //Initiaite state for nodes & links (loading for now)  
@@ -35,11 +36,16 @@ export default class App extends Component {
       super();
       this.performUrl = this.performUrl.bind(this);
       this.state = {
-	  graph_items: {links:[{source:"Loading...",target:"Loading..."}], nodes:[{color: "#170451", id: undefined, label: "Loading...", level: 1,link: "", path: "Loading...",biosample:"", type:"", name:"Loading...", state_len: 3, annotation_type: "-", accession_ids: "-", score:"-"}]},
-	  table_items: {links:[{source:"Loading...",target:"Loading..."}],nodes:[{color: 'black', id: "Loading", label: "Loading...", leaf: "Loading...", level: 1,link: "", name: "", path: "Loading...",biosample:"", type:""}]},
-	  newQuery: 'rs963740',
+	  graph_items: {links:[{source:"Loading...",target:"Loading..."}], nodes:[{color: "#170451", id: undefined, label: "Loading...", level: 1,link: "", path: "Loading...",biosample:"", type:"", name:"Loading...", state_len: 3, annotation_type: "-", accession_ids: "-", score:"-", distance:"-"}]},
+	  table_items: {nodes:[{label: "Loading..."}]},
+	  newQuery: 'rs231361',
+	  assembly: 'GRCh37',
 	  loading: true,
 	  labelswitch: false,
+	  legendVisible: false,
+	  legendAnnotationVisible: false,
+	  legendTitle: 'show tissue legend',
+	  legendAnnotationTitle: 'show links legend',
       };
   }
 //fetch variant graph data from DGA API, rs7903146 is default query variant
@@ -59,33 +65,22 @@ export default class App extends Component {
 	    targetgene: arr1
 	},  () => (this.performUrl()))
     }
+    performAssemblyFilter = (assembly_filter) => {
+	this.setState({
+	    assembly: assembly_filter
+	},  () => (this.performUrl()))
+    }
     performTissueLabelSwitch = (label_filter) => {
 	Object.entries(label_filter).map(([key,value]) => {
 	     this.setState({
 		 labelswitch: value
 	     },  () => (this.performUrl()))})
     }
-    performAllelicEffectFilters = (alleliceffect_filter) => {
-	var arr1 = [];
-	Object.keys(alleliceffect_filter).map(function(keyName) {
-	    if (alleliceffect_filter[keyName] === true) {return (arr1 = arr1.concat(keyName));}
-	})
-	this.setState({
-	    alleliceffect: arr1
-	},  () => (this.performUrl()))
-    }
-    saveCanvas() {
-	const canvasSave = document.getElementById('graph');
-	const d = canvasSave.toDataURL('image/png');
-	const w = window.open('about:blank', 'image from canvas');
-	w.document.write("<img src='"+d+"' alt='from canvas'/>");
-	console.log('Saved!');
-    }
     performUrl = () => {
 	var postData = {
 	    region: this.state.newQuery,
-	    genome: "GRCh37",
-	    ...(this.state.targetgene ?  {'software_used.software.title': this.state.targetgene}  : {}),
+	    ...(this.state.assembly ?  {'genome': this.state.assembly}  : {}),
+	    ...(this.state.targetgene ?  {'annotation_type': this.state.targetgene}  : {}),
             ...(this.state.alleliceffect ?  {'software_used.software.title': this.state.alleliceffect}  : {})	    
 	};
 	var postData1 = {
@@ -104,12 +99,13 @@ export default class App extends Component {
 		const links = response.data.links;
 		const nodes1 = response.data.nodes;
 		const nodes = [];
-		nodes1.forEach(({accession_ids, annotation_type, biosample, color, id, label, link, name, type, path, level, state_len, score}) => {
+		nodes1.forEach(({accession_ids, annotation_type, biosample, color, id, label, link_color, link, name, type, path, level, state_len, score, distance}) => {
 		    const node = {
 			accession_ids,
 			annotation_type,
 			biosample,
 			color,
+			link_color,
 			id,
 			label,
 			link,
@@ -118,7 +114,8 @@ export default class App extends Component {
 			path,
 			level,
 			state_len,
-			score
+			score,
+			distance
 		    };
 		    nodes.push(node);
 		});
@@ -127,6 +124,7 @@ export default class App extends Component {
 		    graph_links: links,
 		    graph_nodes: nodes,
 		    loading: false,
+		    nodes_length: nodes.length
 		});
 	    })	      
 	    .catch(error => {
@@ -137,20 +135,14 @@ export default class App extends Component {
 	    .then(response2 => {
 		const nodes1 = response2.data.nodes;
 		const nodes = [];
-		nodes1.forEach(({accession_ids, annotation_type, biosample, color, id, label, link, name, type, path, level, table_id, score}) => {
+		nodes1.forEach(({accession_ids, annotation_type, biosample, label, link, table_id, score}) => {
 		    const node = {
 			accession_ids,
 			annotation_type,
 			biosample,
-			color,
-			id,
 			label,
 			link,
-			name,
-			type,
-			path,
 			table_id,
-			level,
 			score
 		    };
 		    nodes.push(node);
@@ -167,11 +159,37 @@ export default class App extends Component {
     componentDidMount(){
 	this.performUrl();
     }
+    onClick() {
+	this.setState({legendVisible: !this.state.legendVisible});
+	if (!this.state.legendVisible) {
+	    this.setState({ legendTitle: 'hide tissue legend'});
+	}
+	else {
+	    this.setState({ legendTitle: 'show tissue legend'});
+	}
+    };
+    onClickLegend() {
+	this.setState({legendAnnotationVisible: !this.state.legendAnnotationVisible});
+	if (!this.state.legendAnnotationVisible) {
+	    this.setState({ legendAnnotationTitle: 'hide link legend'});
+	}
+	else {
+	    this.setState({ legendAnnotationTitle: 'show link legend'});
+	}
+    };
+    
+    onChange = () => {
+	this.setState(canvasToImage('graph'));
+    };
     //search & variant graph components
     render() {
 	let graph;
-	if (this.state.graph_links == 0) {
+	if (this.state.nodes_length == 1) {
 	    graph = <Alert variant='warning'><h5>Your selection has no results! Please select a different variant</h5></Alert>
+	}
+	else
+	{
+	    graph = <div id="graph">{this.state.loading ? <div style ={{position: 'absolute', left: '50%', top: '50%',transform: 'translate(-50%, -50%)'}}><Loader type="Bars" color="#00BFFF" /></div> : <ForceTree id='graph' data={this.state.graph_items} label={this.state.labelswitch} />}</div>
 	}
 	let table;
 	if (this.state.table_nodes == 1) {
@@ -181,54 +199,51 @@ export default class App extends Component {
 	{
 	    table = <TableView data={this.state.table_items} />
 	}
-	let genomeBrowser;
-	genomeBrowser = <AppIgv />
 	return (
 		<Container fluid>
 		<Card.Header>
 		<Row>
-		<Col md={{ span: 6, offset: 7 }}>
+		<Col md={{ span: 3 }} sm={{ span: 3 }}>
 		<SearchForm onSearch={this.performSearch} />
 		</Col>
+		<Col md={{ span: 2 }} sm={{ span: 2 }}>
+		<AssemblyFilter onFilter={this.performAssemblyFilter}/>
+	        </Col>
+		<Col md={{ span: 2 }} sm={{ span: 2 }}>
+		<TargetGeneFilter onFilter={this.performTargetGeneFilter}/>
+		</Col>
+		<Col>
+		<Button variant="outline-secondary" size="sm" onClick={() => this.onClick() }>{ this.state.legendTitle }</Button>
+		{ this.state.legendVisible ? <LegendOrdinal scale={organs} direction="column" labelMargin="0 15px 0 5px" shapeMargin="1px 0 0"/> : null }
+	        </Col>
+		<Col>
+		<Button variant="outline-secondary" size="sm" onClick={() => this.onClickLegend() }>{ this.state.legendAnnotationTitle }</Button>
+		{ this.state.legendAnnotationVisible ? <LegendOrdinal scale={annotations} direction="column" labelMargin="0 15px 0 5px" shapeMargin="1px 0 0"/> : null }
+	        </Col>
 		</Row>
 		<Row>
-		<Col md={{ span: 6, offset: 7 }}>
+		<Col md={{ span: 3 }} sm={{ span: 3 }}>
 		{this.state.graph_links ? <h5>Sucess! Searched {this.state.newQuery}</h5> : <h5></h5>}
 	        </Col>
+		<Col md={{ span: 2 }} sm={{ span: 2 }}>
+		<TissueLabelSwitch onFilter={this.performTissueLabelSwitch}/>
+		</Col>
+		<Col md={{ span: 2 }} sm={{ span: 2 }}>
+		<Button variant="outline-secondary" size="sm" onClick={this.onChange}>Save Image</Button>
+		</Col>
 		</Row>
 		</Card.Header>
 		<Col>
 		<Tabs defaultActiveKey="graph" id="uncontrolled-tab-example">
 		<Tab eventKey="graph" title="Target Gene Graph" unmountOnExit="true">
-		<Row style={{height: '1000px'}}>
-		<Col md={{ span: 2}}>
-		<h5>Type of Target Gene</h5>
-		<TargetGeneFilter onFilter={this.performTargetGeneFilter}/>
-		<h5>Allelic Effect Filter</h5>
-		<AllelicEffectFilters onFilter={this.performAllelicEffectFilters} style={{ marginBottom: '1rem' }} />
-		<h5>Display Tissue/Cell Type Label</h5>
-		<TissueLabelSwitch onFilter={this.performTissueLabelSwitch}/>
-		<h5>Tissue Legend</h5>
-		<LegendOrdinal scale={tissues} direction="row" labelMargin="0 15px 0 5px" shapeMargin="1px 0 0"/>
-		<h5>Cell Legend</h5>
-		<LegendOrdinal scale={cells} direction="row" labelMargin="0 15px 0 5px" shapeMargin="1px 0 0"/>
-		</Col>
-                <Col>
-		{this.state.loading ? <div style ={{position: 'absolute', left: '50%', top: '50%',transform: 'translate(-50%, -50%)'}}><Loader type="Bars" color="#00BFFF" height={100} width={100} /></div> : <ForceTree data={this.state.graph_items} label={this.state.labelswitch} />}
-	        </Col>
-		</Row>
+		<Row>
+		{graph}
+	        </Row>
 	        </Tab>
 		<Tab eventKey="table" title="Table" unmountOnExit="true">
 		<Row>
 		{table}
 	        </Row>
-		</Tab>
-		<Tab eventKey="genomebrowser" title="Genome Browser" unmountOnExit="true">
-		<Row className="justify-content-md-center">
-		<Alert variant="success">
-		<Alert.Heading>Genome Browser showing links between distal elements and target genes coming soon...</Alert.Heading>
-		</Alert>
-		</Row>
 		</Tab>
 		</Tabs>
 		</Col>
