@@ -19,12 +19,13 @@ import Tab from 'react-bootstrap/Tabs';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import { LegendOrdinal } from '@vx/legend';
+import { LegendLabel } from '@vx/legend';
 import { scaleOrdinal } from '@vx/scale';
-import canvasToImage from 'canvas-to-image';
+import html2canvas from 'html2canvas';
 import './react-bootstrap-table2.min.css';
 const organs = scaleOrdinal({
-    domain: ['pancreas', 'liver', 'kidney', 'heart', 'connective tissues', 'other tissues'],
-    range: ['#add8e6', '#ffd700', '#7fff00', '#ff0000', '#66ffff', '#d6d1d1']
+    domain: ['pancreas', 'liver', 'kidney', 'heart', 'adipose', 'muscle', 'brain', 'vascular', 'other'],
+    range: ['#add8e6', '#ff7f50', '#7fff00', '#ff0000', '#654321', '#8b0000', '#ffd700','#66ffff', '#d6d1d1']
 });
 const annotations = scaleOrdinal({
     domain: ['allelic effect', 'accessible chromatin', 'allelic effect & accessible chromatin', 'eQTL', 'no evidence'],
@@ -44,6 +45,7 @@ export default class App extends Component {
 	  labelswitch: false,
 	  legendVisible: false,
 	  legendAnnotationVisible: false,
+	  isChecked: true,
 	  legendTitle: 'show tissue legend',
 	  legendAnnotationTitle: 'show links legend',
       };
@@ -99,7 +101,7 @@ export default class App extends Component {
 		const links = response.data.links;
 		const nodes1 = response.data.nodes;
 		const nodes = [];
-		nodes1.forEach(({accession_ids, annotation_type, biosample, color, id, label, link_color, link, name, type, path, level, state_len, score, distance}) => {
+		nodes1.forEach(({accession_ids, annotation_type, biosample, color, id, label, link_color, link, name, type, path, level, state_len, score, distance,width}) => {
 		    const node = {
 			accession_ids,
 			annotation_type,
@@ -108,6 +110,7 @@ export default class App extends Component {
 			link_color,
 			id,
 			label,
+			width,
 			link,
 			name,
 			type,
@@ -177,19 +180,29 @@ export default class App extends Component {
 	    this.setState({ legendAnnotationTitle: 'show link legend'});
 	}
     };
-    
-    onChange = () => {
-	this.setState(canvasToImage('graph'));
-    };
+    saveImage = () => {
+	var input = document.getElementById('2d-graph');
+	html2canvas(input)
+	    .then((canvas) =>{
+		let imgData = canvas.toDataURL('image/png').replace("image/png", "image/octet-stream");
+		this.downloadURL(imgData);
+	    });
+    }
+    downloadURL(imgData){
+	var a = document.createElement('a');
+	a.href = imgData.replace("image/png", "image/octet-stream");
+	a.download = 'graph.png';
+	a.click();
+    }
     //search & variant graph components
     render() {
 	let graph;
 	if (this.state.nodes_length == 1) {
-	    graph = <Alert variant='warning'><h5>Your selection has no results! Please select a different variant</h5></Alert>
+	   graph = <Alert variant='warning'><h5>Your selection has no results! Please select a different variant</h5></Alert>
 	}
 	else
 	{
-	    graph = <div id="graph">{this.state.loading ? <div style ={{position: 'absolute', left: '50%', top: '50%',transform: 'translate(-50%, -50%)'}}><Loader type="Bars" color="#00BFFF" /></div> : <ForceTree id='graph' data={this.state.graph_items} label={this.state.labelswitch} />}</div>
+	    graph = <div>{this.state.loading ? <div style ={{position: 'absolute', left: '50%', top: '50%',transform: 'translate(-50%, -50%)'}}><Loader type="Bars" color="#00BFFF" /></div> : <ForceTree data={this.state.graph_items} label={this.state.labelswitch} />}</div>
 	}
 	let table;
 	if (this.state.table_nodes == 1) {
@@ -209,17 +222,12 @@ export default class App extends Component {
 		<Col md={{ span: 2 }} sm={{ span: 2 }}>
 		<AssemblyFilter onFilter={this.performAssemblyFilter}/>
 	        </Col>
-		<Col md={{ span: 2 }} sm={{ span: 2 }}>
+		<Col md={{ span: 1.5 }} sm={{ span: 1.5 }}>
 		<TargetGeneFilter onFilter={this.performTargetGeneFilter}/>
 		</Col>
 		<Col>
-		<Button variant="outline-secondary" size="sm" onClick={() => this.onClick() }>{ this.state.legendTitle }</Button>
-		{ this.state.legendVisible ? <LegendOrdinal scale={organs} direction="column" labelMargin="0 15px 0 5px" shapeMargin="1px 0 0"/> : null }
-	        </Col>
-		<Col>
-		<Button variant="outline-secondary" size="sm" onClick={() => this.onClickLegend() }>{ this.state.legendAnnotationTitle }</Button>
-		{ this.state.legendAnnotationVisible ? <LegendOrdinal scale={annotations} direction="column" labelMargin="0 15px 0 5px" shapeMargin="1px 0 0"/> : null }
-	        </Col>
+		<Button variant="outline-secondary" size="sm" onClick={() => this.saveImage()}>Save Image</Button>
+		</Col>
 		</Row>
 		<Row>
 		<Col md={{ span: 3 }} sm={{ span: 3 }}>
@@ -228,17 +236,24 @@ export default class App extends Component {
 		<Col md={{ span: 2 }} sm={{ span: 2 }}>
 		<TissueLabelSwitch onFilter={this.performTissueLabelSwitch}/>
 		</Col>
-		<Col md={{ span: 2 }} sm={{ span: 2 }}>
-		<Button variant="outline-secondary" size="sm" onClick={this.onChange}>Save Image</Button>
-		</Col>
 		</Row>
 		</Card.Header>
 		<Col>
 		<Tabs defaultActiveKey="graph" id="uncontrolled-tab-example">
 		<Tab eventKey="graph" title="Target Gene Graph" unmountOnExit="true">
+		<Row id = "2d-graph">
+		<Col md={{ span: 10 }}>
 		<Row>
-		{graph}
+		{ graph }
 	        </Row>
+		</Col>
+		<Col md={{ span: 2 }}>
+		<LegendLabel align={'left'} margin={'0 4px'}><h5>Tissues</h5></LegendLabel>
+		<LegendOrdinal scale={organs} direction="column" labelMargin="0 15px 0 5px" shapeMargin="1px 0 0"/>
+		<LegendLabel align={'left'} margin={'0 4px'}><h5>Links</h5></LegendLabel>
+		<LegendOrdinal scale={annotations} direction="column" labelMargin="0 15px 0 5px" shapeMargin="1px 0 0"/>
+		</Col>
+		</Row>
 	        </Tab>
 		<Tab eventKey="table" title="Table" unmountOnExit="true">
 		<Row>

@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import Row from 'react-bootstrap/Row';
 import Form from 'react-bootstrap/Form'
-import Col from 'react-bootstrap/Col';
 class TargetGeneFilter extends Component {
   constructor(props) {
       super(props);      
@@ -20,18 +18,18 @@ class TargetGeneFilter extends Component {
 	const value = !this.state.selected[key];
 	const newSelected = Object.assign(this.state.selected, {[key]: value});
  	this.setState({onFilter: this.props.onFilter(newSelected)});
-	console.log(e.target.value);
-	if (e.target.value == 'Chromatin interaction target genes') { this.setState({isCheckedInteraction: !this.state.isCheckedInteraction});}
-	else if (e.target.value == 'Coaccessible target genes') {this.setState({isCheckedCoaccessible: !this.state.isCheckedCoaccessible});}
-	else if (value == 'Coaccessible target genes' && value == 'Chromatin interaction target genes')  {(this.setState({isCheckedInteraction: this.state.isCheckedInteraction})) && (this.setState({isCheckedCoaccessible: this.state.isCheckedCoaccessible}));}
-	else {(this.setState({isCheckedInteraction: !this.state.isCheckedInteraction})) && (this.setState({isCheckedCoaccessible: !this.state.isCheckedCoaccessible}));}
+	//console.log(newSelected);
+	//this.setState({isCheckedInteraction: !this.state.selected[key]});
+	//this.setState({isCheckedCoaccessible: !this.state.selected[key]});
+	//if (e.target.value == 'Chromatin interaction target genes') { this.setState({isCheckedInteraction: !this.state.isCheckedInteraction});}
+	//else if (e.target.value == 'Coaccessible target genes') {this.setState({isCheckedCoaccessible: !this.state.isCheckedCoaccessible});}
+	//else if (value == 'Coaccessible target genes' && value == 'Chromatin interaction target genes')  {(this.setState({isCheckedInteraction: this.state.isCheckedInteraction})) && (this.setState({isCheckedCoaccessible: this.state.isCheckedCoaccessible}));}
+	//else {(this.setState({isCheckedInteraction: !this.state.isCheckedInteraction})) && (this.setState({isCheckedCoaccessible: !this.state.isCheckedCoaccessible}));}
     };
     render() {
-	console.log(this.state.isCheckedInteraction);
-	console.log(this.state.isCheckedCoaccessible);
 	return (
 		<Form>
-		<Form.Label>Target Gene Type</Form.Label>
+		<Form.Label><h5>Target Gene Type</h5></Form.Label>
 		<Form.Check type='checkbox' onClick={this.toggleOption} value='Chromatin interaction target genes' label='Chromatin interaction' style={{fontSize: '0.8rem'}}/>
 		<Form.Check type='checkbox' onClick={this.toggleOption} value='Coaccessible target genes' label='Co-accessibility' style={{fontSize: '0.8rem'}}/>
 		</Form>
