@@ -222,19 +222,24 @@ export default class App extends Component {
 		<Col md={{ span: 2 }} sm={{ span: 2 }}>
 		<AssemblyFilter onFilter={this.performAssemblyFilter}/>
 	        </Col>
-		<Col md={{ span: 1.5 }} sm={{ span: 1.5 }}>
+		<Col md={{ span: 2 }} sm={{ span: 2 }}>
 		<TargetGeneFilter onFilter={this.performTargetGeneFilter}/>
 		</Col>
 		<Col>
+		<Row>
 		<Button variant="outline-secondary" size="sm" onClick={() => this.saveImage()}>Save Image</Button>
+		</Row>
+		<br></br>
+		<Row>
+		<TissueLabelSwitch onFilter={this.performTissueLabelSwitch}/>
+		</Row>
 		</Col>
 		</Row>
 		<Row>
 		<Col md={{ span: 3 }} sm={{ span: 3 }}>
 		{this.state.graph_links ? <h5>Sucess! Searched {this.state.newQuery}</h5> : <h5></h5>}
 	        </Col>
-		<Col md={{ span: 2 }} sm={{ span: 2 }}>
-		<TissueLabelSwitch onFilter={this.performTissueLabelSwitch}/>
+		<Col>
 		</Col>
 		</Row>
 		</Card.Header>

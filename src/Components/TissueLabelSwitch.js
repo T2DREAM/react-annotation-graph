@@ -28,9 +28,7 @@ class TissueLabelSwitch extends Component {
     render() {
 	return (
 	       <Form>
-		<Col>
 		<Button variant="outline-secondary" size="sm" onClick={this.toggleOption} value='ON'>{ this.state.labelTitle }</Button>
-		</Col>
                 </Form>	
     );
   }
