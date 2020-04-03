@@ -12,6 +12,8 @@
     "canvas2image": "^1.0.5",
     "cors": "^2.8.5",
     "d3-force": "^2.0.1",
+    "file-saver": "^2.0.2",
+    "html2canvas": "^1.0.0-rc.5",
     "igv": "^2.2.15",
     "match-sorter": "^4.0.1",
     "mdbreact": "^4.18.1",
