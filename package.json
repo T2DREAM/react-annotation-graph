@@ -6,6 +6,7 @@
   "dependencies": {
     "@vx/legend": "0.0.189",
     "@vx/scale": "0.0.189",
+    "audit": "0.0.6",
     "axios": "^0.18.0",
     "bootstrap": "^4.4.1",
     "canvas-to-image": "^2.2.0",
@@ -13,6 +14,7 @@
     "cors": "^2.8.5",
     "d3-force": "^2.0.1",
     "file-saver": "^2.0.2",
+    "fix": "0.0.6",
     "html2canvas": "^1.0.0-rc.5",
     "igv": "^2.2.15",
     "match-sorter": "^4.0.1",
@@ -39,10 +41,10 @@
     "react-sidebar": "^3.0.2",
     "react-sizeme": "^2.6.12",
     "react-spinners": "^0.6.1",
-    "react-table": "^6.10.0",
+    "react-table": "^6.11.5",
     "react-table-filter": "^2.0.1",
     "reactstrap": "^8.2.0",
-    "styled-components": "^5.0.0-beta.8",
+    "styled-components": "^5.1.0",
     "tmp_es6_igv": "0.0.4",
     "xhr": "^2.5.0"
   },

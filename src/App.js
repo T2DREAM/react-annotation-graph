@@ -11,6 +11,7 @@ import TableView from './Components/TabularView';
 import TissueLabelSwitch from './Components/TissueLabelSwitch';
 import TargetGeneFilter from './Components/TargetGeneFilter';
 import AssemblyFilter from './Components/AssemblyFilter';
+import TableDotView from './Components/TableDotView';
 import './bootstrap.min.css';
 import Loader from 'react-loader-spinner';
 import "./react-spinner-loader.css"
@@ -39,7 +40,7 @@ export default class App extends Component {
       this.state = {
 	  graph_items: {links:[{source:"Loading...",target:"Loading..."}], nodes:[{color: "#170451", id: undefined, label: "Loading...", level: 1,link: "", path: "Loading...",biosample:"", type:"", name:"Loading...", state_len: 3, annotation_type: "-", accession_ids: "-", score:"-", distance:"-"}]},
 	  table_items: {nodes:[{label: "Loading..."}]},
-	  newQuery: 'rs231361',
+	  newQuery: 'rs6777684',
 	  assembly: 'GRCh37',
 	  loading: true,
 	  labelswitch: false,
@@ -50,7 +51,7 @@ export default class App extends Component {
 	  legendAnnotationTitle: 'show links legend',
       };
   }
-//fetch variant graph data from DGA API, rs7903146 is default query variant
+//fetch variant graph data from DGA API, rs6777684 is default query variant
 //callback passed to setState access State right after setting it
     performSearch = (query) =>
 	{
@@ -83,7 +84,6 @@ export default class App extends Component {
 	    region: this.state.newQuery,
 	    ...(this.state.assembly ?  {'genome': this.state.assembly}  : {}),
 	    ...(this.state.targetgene ?  {'annotation_type': this.state.targetgene}  : {}),
-            ...(this.state.alleliceffect ?  {'software_used.software.title': this.state.alleliceffect}  : {})	    
 	};
 	var postData1 = {
 	    region: this.state.newQuery,
@@ -197,8 +197,10 @@ export default class App extends Component {
     //search & variant graph components
     render() {
 	let graph;
-	if (this.state.nodes_length == 1) {
-	   graph = <Alert variant='warning'><h5>Your selection has no results! Please select a different variant</h5></Alert>
+	console.log(this.state.targetgene);
+	console.log(this.state.targetgene && this.state.targetgene.length <= 0);
+	if (this.state.nodes_length == 1 || (this.state.targetgene && this.state.targetgene.length == 0)) {
+	   graph = <Alert variant='warning'><h5>Your selection has no results! Please select a different variant or appropriate filters.</h5></Alert>
 	}
 	else
 	{
@@ -268,7 +270,7 @@ export default class App extends Component {
 		</Tabs>
 		</Col>
 		<Card.Footer className="text-muted">
-		&copy;2019 Diabetes Epigenome Atlas
+		&copy;2020 Diabetes Epigenome Atlas
 	        </Card.Footer>
 		</Container>
 	);

@@ -1,39 +1,48 @@
 import React, { Component } from "react";
-import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button';
+import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 class TargetGeneFilter extends Component {
   constructor(props) {
+
       super(props);      
       this.state = {
-	  isCheckedInteraction: true,
-	  isCheckedCoaccessible: true,
 	  selected: {
-	      'Chromatin interaction target genes': false,
-	      'Coaccessible target genes': false,
+	      'Chromatin interaction target genes': true,
+	      'Coaccessible target genes': true,
 	  }
       };
       this.toggleOption = this.toggleOption.bind(this);
+      
   }
-    toggleOption = (e) => {
-	const key = e.target.value;
-	const value = !this.state.selected[key];
-	const newSelected = Object.assign(this.state.selected, {[key]: value});
- 	this.setState({onFilter: this.props.onFilter(newSelected)});
-	//console.log(newSelected);
-	//this.setState({isCheckedInteraction: !this.state.selected[key]});
-	//this.setState({isCheckedCoaccessible: !this.state.selected[key]});
-	//if (e.target.value == 'Chromatin interaction target genes') { this.setState({isCheckedInteraction: !this.state.isCheckedInteraction});}
-	//else if (e.target.value == 'Coaccessible target genes') {this.setState({isCheckedCoaccessible: !this.state.isCheckedCoaccessible});}
-	//else if (value == 'Coaccessible target genes' && value == 'Chromatin interaction target genes')  {(this.setState({isCheckedInteraction: this.state.isCheckedInteraction})) && (this.setState({isCheckedCoaccessible: this.state.isCheckedCoaccessible}));}
-	//else {(this.setState({isCheckedInteraction: !this.state.isCheckedInteraction})) && (this.setState({isCheckedCoaccessible: !this.state.isCheckedCoaccessible}));}
+      toggleOption = (e) => {
+	  const key = e.target.value;
+	  const value = !this.state.selected[key];
+	  const newSelected = Object.assign(this.state.selected, {[key]: value});
+	  return this.props.onFilter(newSelected);
+      };
+    getBsStyle(key) {
+	return this.state.selected[key] ? 'secondary' : 'outline-secondary';
     };
     render() {
 	return (
-		<Form>
-		<Form.Label><h5>Target Gene Type</h5></Form.Label>
-		<Form.Check type='checkbox' onClick={this.toggleOption} value='Chromatin interaction target genes' label='Chromatin interaction' style={{fontSize: '0.8rem'}}/>
-		<Form.Check type='checkbox' onClick={this.toggleOption} value='Coaccessible target genes' label='Co-accessibility' style={{fontSize: '0.8rem'}}/>
-		</Form>
-    );
-  }
+	        <ButtonToolbar>
+		<Col>
+		<Row>
+	        <Button onClick={this.toggleOption} value='Chromatin interaction target genes' variant = {this.getBsStyle('Chromatin interaction target genes')} size="sm">
+	        Chromatin Interaction
+                </Button>
+		</Row>
+		<Row style = {{marginTop: '20px'}}>
+		<Button onClick={this.toggleOption} value='Coaccessible target genes' variant = {this.getBsStyle('Coaccessible target genes')} size="sm">
+	        Co-accessibility
+	        </Button>
+		</Row>
+		</Col>
+		</ButtonToolbar>
+	)
+    }
+	
 }
 export default TargetGeneFilter;

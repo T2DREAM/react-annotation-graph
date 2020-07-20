@@ -12,7 +12,8 @@ class TableView extends React.Component {
 	    'accessible chromatin': 'accessible chromatin',
 	    'chromatin state': 'chromatin state',
 	    'binding sites': 'binding sites',
-	    'target gene predictions': 'target gene predictions',
+	    'Chromatin interaction target genes': 'Chromatin interaction target genes',
+	    'Coaccessible target genes': 'Coaccessible target genes',
 	    'variant allelic effects': 'variant allelic effects',
 	    'gene expression': 'gene expression',
 	    'eQTL':'eQTL'
