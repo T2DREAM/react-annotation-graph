@@ -30,7 +30,7 @@ This is a ReactJS module that uses force graph to display an interactive tree gr
 3. For chromatin state annotations that have strong signals are displayed
 4. The results are downloadable as CSV file
 
-Installation
+### Installation
 
 We recommend node.js v12 or higher(tested on node@v12.18.2)
 react-annotation-graph is bundled using Webpack. To install all necessary dependencies for a development/production environment, run:
