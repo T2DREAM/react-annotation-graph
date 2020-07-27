@@ -1,3 +1,53 @@
+### Graphical Display 
+
+This is a ReactJS module that uses force graph to display an interactive tree graph of all the Target Gene Predictions of all annotation data currently in DGA for various Diabetes relevant and complication tissues and cell types in the DGA for a query genetic variant
+
+1. User can search for variant rsid (example: rs7903146, chr10:66794059) or variant coordinate via. Search interface on top right corner
+2. Graph orientation - the variant node connects to all the tissue/cell type node that have target gene annotations (peaks in the target gene annotation BED files that intersect the searched variant); the intermediate tissue/cell type node connects to genes nodes. Gene nodes are weighted by evidence (color scale).  
+3. The tissue/cell type node are color coded based on organs that are relevant to T2D tissues/complication tissues (see tissue legend on left panel of the graph)
+4. Links are highlighted by whether variant has allelic effect or/and accessible chromatin on cell type. Links are also, highlighted if the tissue has gene expression for the target gene (see link legend on the left side of the graph)
+5. User can click on nodes to re-direct to the DGA page to obtain more detailed information for that node (i.e. clicking on tissue/cell type node links out to all the annotations relevant to that tissue/cell type; clicking on gene node links to all the annotations that the target gene is found for the searched variant)
+6. In addition, hovering over the target gene node displays metadata such as annotation accession ids, evidence (i.e. if the gene was implied in Co-accessibility and/or Chromatin Interaction), Gene score predicted by these methods and distance between the searched variant and promoter/gene
+7. User can select the genome assembly for the variant search 
+8. The graph can be filtered by type of target gene i.e. either Co-accessibility or Chromatin intersection (promoter capture HiC and HiC)
+9. By default, the tissue/cell type labels are not displayed. show tissue label buttons allows displaying the tissue labels on the graph
+10. The graph along with legend can be saved as PNG image
+ 
+ #### Navigation 
+ * Mouse wheel/click: zoom in/out
+ * Node left click: redirect to annotation on DGA
+ * Hover over the node: for node label aka. tissue, cell type or annotation accession
+ * Hover over the link (variant - tissues or tissues - cell type): for annotation type
+ * Filter buttons: Filter by type of target gene aka method
+
+### Tabular Display
+
+1. All the annotations that intersect the variants searched are displayed 
+2. The table can be sorted & filtered by Biosample, Annotation Type, State
+3. For chromatin state annotations that have strong signals are displayed
+4. The results are downloadable as CSV file
+
+Installation
+
+We recommend node.js v12 or higher(tested on node@v12.18.2)
+react-annotation-graph is bundled using Webpack. To install all necessary dependencies for a development/production environment, run:
+
+```
+$ npm install
+```
+
+Once complete run build from the top of the application directory to run all tests and build the react-annotation-graph library bundle.
+```
+$npm run build
+```
+
+### Future Development
+#### Matrix view
+
+Matrix view of target genes v/s tissues is alternate visualization of tissues and effector gene for the variant. The weight of the dot matrix corresponds to evidence (# of annotations)
+
+Copy contents of build directory to web-directory open location to web directory in the browser to view the application
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
