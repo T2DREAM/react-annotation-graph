@@ -1,3 +1,5 @@
+
+![target_gene_graph](https://github.com/T2DREAM/react-annotation-graph/blob/master/target-genes-graph.png)
 ### Graphical Display 
 
 This is a ReactJS module that uses force graph to display an interactive tree graph of all the Target Gene Predictions of all annotation data currently in DGA for various Diabetes relevant and complication tissues and cell types in the DGA for a query genetic variant
@@ -20,7 +22,8 @@ This is a ReactJS module that uses force graph to display an interactive tree gr
  * Hover over the link (variant - tissues or tissues - cell type): for annotation type
  * Filter buttons: Filter by type of target gene aka method
 
-### Tabular Display
+![tabular_view](https://github.com/T2DREAM/react-annotation-graph/blob/master/tabular_view.png)
+ ### Tabular Display
 
 1. All the annotations that intersect the variants searched are displayed 
 2. The table can be sorted & filtered by Biosample, Annotation Type, State
