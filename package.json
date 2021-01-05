@@ -7,7 +7,7 @@
     "@vx/legend": "0.0.189",
     "@vx/scale": "0.0.189",
     "audit": "0.0.6",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "bootstrap": "^4.4.1",
     "canvas-to-image": "^2.2.0",
     "canvas2image": "^1.0.5",
